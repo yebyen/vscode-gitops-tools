@@ -25,6 +25,12 @@ There are a few requirements before installing and using the extension:
 - The `flux` tool is required and can be installed from this extension
 - Additional [dependencies](#dependencies) for Weave GitOps Enterprise and Azure users
 
+### Flux Version Compatibility
+
+This extension is compatible with **Flux v2.0.0 and later**, including the latest Flux v2.7+ and v2.8+ releases. 
+
+> **Note:** Flux v2.7 removed the deprecated `v1beta1` and `v2beta1` APIs, and Flux v2.8 removed `v1beta2` and `v2beta2` APIs. This extension uses kubectl and Flux CLI abstractions that automatically handle API version negotiation, so no changes are required when upgrading Flux.
+
 Once you have satisfied these requirements you can find and install GitOps Tools in the [Extension Marketplace](https://marketplace.visualstudio.com/items?itemName=Weaveworks.vscode-gitops-tools) by searching for "**fluxcd**" or "**gitops**".
 
 ### kubectl proxy
