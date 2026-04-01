@@ -1,17 +1,13 @@
 # Implementation Tasks
 
-## Phase 1: Compatibility Testing
+## Phase 1: Code Analysis (No Cluster Required)
 
-- [ ] Set up test environment with Flux v2.8+ cluster
-- [ ] Verify extension loads and connects to cluster
-- [ ] Test `flux check` output parsing with current Flux CLI
-- [ ] Test `flux tree` command JSON parsing
-- [ ] Test `flux trace` command with v1 API versions
-- [ ] Verify Sources tree view displays GitRepository, HelmRepository, Bucket, OCIRepository
-- [ ] Verify Workloads tree view displays Kustomization and HelmRelease
-- [ ] Test reconcile, suspend, and resume commands
-- [ ] Test delete source and delete workload commands
-- [ ] Document any failures or breaking changes found
+- [~] Analyze `flux check` output parsing for compatibility with Flux v2.7+
+- [ ] Analyze `flux tree` command JSON parsing for compatibility
+- [ ] Analyze `flux trace` command API version handling
+- [ ] Review kubectl queries for resource group/version compatibility
+- [ ] Review type definitions for hardcoded API versions
+- [ ] Document all findings in design.md
 
 ## Phase 2: Code Updates (if needed)
 
@@ -24,9 +20,8 @@
 ## Phase 3: Documentation
 
 - [ ] Update README.md with minimum Flux version (v2.7+)
-- [ ] Update CHANGELOG.md with compatibility notes
 - [ ] Document any known limitations with newer Flux versions
-- [ ] Add migration notes for users on older Flux versions
+- [ ] Create PR description
 
 ## Phase 4: New Feature Support (Optional/Future)
 
