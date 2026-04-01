@@ -21,7 +21,7 @@
 
 - [x] Update README.md with minimum Flux version (v2.7+)
 - [x] Document any known limitations with newer Flux versions
-- [ ] Create PR description
+- [x] Create PR description
 
 ## Phase 4: New Feature Support (Optional/Future)
 
