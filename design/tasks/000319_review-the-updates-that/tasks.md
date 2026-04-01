@@ -11,15 +11,15 @@
 
 ## Phase 2: Code Updates (if needed)
 
-- [ ] Update API version references in type definitions if hardcoded
-- [ ] Fix `flux check` parsing if output format changed
-- [ ] Fix `flux trace` command if API version handling changed
-- [ ] Update kubectl queries if resource group/version changed
-- [ ] Update FluxTypes to include any new resource kinds
+- [x] ~~Update API version references in type definitions if hardcoded~~ Not needed - queries use kind names
+- [x] ~~Fix `flux check` parsing if output format changed~~ Not needed - format unchanged
+- [x] ~~Fix `flux trace` command if API version handling changed~~ Not needed - uses dynamic apiVersion
+- [x] ~~Update kubectl queries if resource group/version changed~~ Not needed - uses kind names
+- [x] Update comments in helmRelease.ts to reference v1 instead of v1beta1
 
 ## Phase 3: Documentation
 
-- [ ] Update README.md with minimum Flux version (v2.7+)
+- [~] Update README.md with minimum Flux version (v2.7+)
 - [ ] Document any known limitations with newer Flux versions
 - [ ] Create PR description
 
