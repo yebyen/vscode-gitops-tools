@@ -2,12 +2,12 @@
 
 ## Phase 1: Code Analysis (No Cluster Required)
 
-- [~] Analyze `flux check` output parsing for compatibility with Flux v2.7+
-- [ ] Analyze `flux tree` command JSON parsing for compatibility
-- [ ] Analyze `flux trace` command API version handling
-- [ ] Review kubectl queries for resource group/version compatibility
-- [ ] Review type definitions for hardcoded API versions
-- [ ] Document all findings in design.md
+- [x] Analyze `flux check` output parsing for compatibility with Flux v2.7+
+- [x] Analyze `flux tree` command JSON parsing for compatibility
+- [x] Analyze `flux trace` command API version handling
+- [x] Review kubectl queries for resource group/version compatibility
+- [x] Review type definitions for hardcoded API versions
+- [x] Document all findings in design.md
 
 ## Phase 2: Code Updates (if needed)
 
