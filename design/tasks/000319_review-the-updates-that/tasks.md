@@ -23,7 +23,13 @@
 - [x] Document any known limitations with newer Flux versions
 - [x] Create PR description
 
-## Phase 4: New Feature Support (Optional/Future)
+## Phase 4: CI/CD Updates for Flux 2.8 Testing
+
+- [~] Update CI workflow to use Flux 2.8.x explicitly
+- [ ] Run CI tests against Flux 2.8 to verify compatibility
+- [ ] Document test results in design.md
+
+## Phase 5: New Feature Support (Optional/Future)
 
 - [ ] Add ExternalArtifact resource type support
 - [ ] Add ArtifactGenerator resource type support  
