@@ -4,6 +4,14 @@ See [releases](https://github.com/weaveworks/vscode-gitops-tools/releases) for s
 
 The current release notes are always published on the Releases page, by automation. This `CHANGELOG` is manually curated by a release engineer from those notes for house-keeping.
 
+# v0.28.0
+
+* Restore streaming/live-update feature with VS Code 1.85+ compatibility
+* Add kubectl proxy infrastructure for real-time Kubernetes API connections
+* Implement debounced informer updates (150ms batching) to prevent UI glitches
+* Proper proxy lifecycle management on context switches and extension deactivation
+* Requires VS Code 1.85.0 or later
+
 # v0.27.0
 
 * Roll back to pre-0.25.x codebase (#504, #505)

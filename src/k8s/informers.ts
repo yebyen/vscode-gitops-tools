@@ -134,7 +134,7 @@ export function destroyInformers(): void {
 async function createInformer(
 	kc: k8s.KubeConfig,
 	api: APIParams,
-	type: 'source' | 'workload'
+	type: 'source' | 'workload',
 ): Promise<void> {
 	if (!k8sCustomApi) {
 		return;
@@ -150,7 +150,7 @@ async function createInformer(
 			const result = await k8sCustomApi!.listClusterCustomObject(
 				api.group,
 				api.version,
-				api.plural
+				api.plural,
 			);
 			return {
 				response: result.response as http.IncomingMessage,

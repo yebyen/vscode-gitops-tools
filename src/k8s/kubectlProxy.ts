@@ -63,7 +63,7 @@ export async function startKubeProxy(): Promise<void> {
  * Set up event listeners on the proxy process.
  */
 function setupProxyListeners(proc: ChildProcess) {
-	proc.on('exit', (code) => {
+	proc.on('exit', code => {
 		if (proxyProc?.pid === proc.pid) {
 			output.send(`kubectl proxy exited with code ${code}`, { revealOutputView: false });
 			proxyProc = undefined;
@@ -72,7 +72,7 @@ function setupProxyListeners(proc: ChildProcess) {
 		}
 	});
 
-	proc.on('error', (err) => {
+	proc.on('error', err => {
 		output.send(`kubectl proxy error: ${err.message}`, { revealOutputView: false });
 		if (!proc.killed) {
 			proc.kill();
