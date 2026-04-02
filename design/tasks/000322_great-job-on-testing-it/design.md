@@ -113,3 +113,39 @@ From v0.26.0 (commit `d145e7a`), these files need to be brought back and fixed:
 - VS Code TreeView behavior may change again in future versions
 - Need extensive testing across VS Code versions
 - kubectl proxy adds a child process that must be managed carefully
+
+## Implementation Notes
+
+### What We Actually Built
+
+Instead of restoring the complex `asyncDataProvider.ts` and `kubernetesObjectDataProvider.ts` from v0.26.0, we took a simpler approach:
+
+1. **Kept existing DataProvider** - The current `src/views/dataProviders/dataProvider.ts` already works correctly with VS Code 1.85+
+2. **Added debouncing in informers** - Rather than debouncing in the data provider layer, we debounce at the informer event handler level in `src/k8s/informers.ts`
+3. **Standard refresh() calls** - We use VS Code's native `TreeDataProvider.refresh()` which properly preserves expand/collapse state
+
+### Key Implementation Decisions
+
+1. **150ms debounce delay** - Chosen as a balance between responsiveness and batching. Prevents UI glitches while still feeling real-time.
+
+2. **Separate debounce for sources vs workloads** - Each tree view has its own debounce state, so updates to one don't affect the other.
+
+3. **Graceful error handling** - Informer errors are logged but don't crash the extension. The keep-alive mechanism will restart the proxy if needed.
+
+4. **Proxy restart on context change** - Added to `src/views/treeViews.ts` to ensure informers reconnect to the new cluster.
+
+### Files Created
+
+| File | Lines | Purpose |
+|------|-------|---------|
+| `src/k8s/kubectlProxy.ts` | 154 | Proxy lifecycle management |
+| `src/k8s/createKubeProxyConfig.ts` | 48 | KubeConfig for proxy connection |
+| `src/k8s/client.ts` | 39 | K8s API client initialization |
+| `src/k8s/informers.ts` | 205 | Informers with debounced refresh |
+
+### Gotchas Discovered
+
+- The v0.26.0 codebase had a completely different directory structure (`src/ui/treeviews/` vs `src/views/`)
+- The `@kubernetes/client-node` types changed - `HttpResponse` is now `http.IncomingMessage`
+- Error handlers for informers need `unknown` type, not `Error`
+- VS Code engine must be `^1.85.0` to match the compatibility target
