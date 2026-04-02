@@ -25,9 +25,9 @@
 
 ## Phase 4: CI/CD Updates for Flux 2.8 Testing
 
-- [~] Update CI workflow to use Flux 2.8.x explicitly
-- [ ] Run CI tests against Flux 2.8 to verify compatibility
-- [ ] Document test results in design.md
+- [x] Update CI workflow to use Flux 2.8.x and Kubernetes 1.33
+- [x] Run E2E tests against Flux 2.8 to verify compatibility
+- [x] Document test results in design.md
 
 ## Phase 5: New Feature Support (Optional/Future)
 

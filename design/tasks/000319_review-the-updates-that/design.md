@@ -139,3 +139,36 @@ The extension was designed with good abstraction:
 - Flux CLI v2.7+ recommended for users
 - kubectl with cluster access
 - Kubernetes cluster running Flux v2.7+
+
+## E2E Test Results (Flux v2.8.3 + Kubernetes v1.33.0)
+
+**Test Environment:**
+- Flux CLI: v2.8.3
+- Kubernetes: v1.33.0 (kind v0.27.0)
+- VS Code: v1.114.0
+- Extension: v0.27.0
+
+**All 7 E2E tests passed:**
+
+| Test | Result | Time |
+|------|--------|------|
+| Extension is activated | ✅ Pass | — |
+| Current cluster is listed | ✅ Pass | 88ms |
+| Enable GitOps installs Flux | ✅ Pass | 6148ms |
+| Sources are listed (GitRepository) | ✅ Pass | 2268ms |
+| OCI Sources are listed (OCIRepository) | ✅ Pass | 4269ms |
+| Kustomizations are listed | ✅ Pass | 5232ms |
+| Disable GitOps uninstalls Flux | ✅ Pass | 635ms |
+
+**Key observations:**
+- `flux install` correctly installs Flux v2.8.3 controllers (helm-controller v1.5.3, kustomize-controller v1.8.2, notification-controller v1.8.2, source-controller v1.8.1)
+- `flux check` output parsing works correctly with Flux v2.8 format
+- `flux create source git` and `flux create source oci` work correctly with v1 API
+- `flux create kustomization` works correctly with v1 API
+- kubectl queries for GitRepository, OCIRepository, Kustomization all work against v1-only CRDs
+- `flux uninstall` cleanup works correctly including new CRDs (e.g., ExternalArtifact)
+
+**CI Workflow Updates:**
+- Updated `ci.yml` to use kind v0.27.0 with Kubernetes v1.33.0 (required by Flux v2.8)
+- Updated Flux CLI action to use `version: '2.8.x'`
+- Added `flux version --client` and `flux check --pre` verification steps
