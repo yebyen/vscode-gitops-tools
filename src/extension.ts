@@ -11,6 +11,7 @@ import { statusBar } from './statusBar';
 import { Telemetry, TelemetryEventNames } from './telemetry';
 import { createTreeViews, clusterTreeViewProvider, sourceTreeViewProvider, workloadTreeViewProvider } from './views/treeViews';
 import { shell } from './shell';
+import { kubeProxyKeepAlive, setExtensionActive, disposeKubeProxy } from './k8s/kubectlProxy';
 
 /** Disable interactive modal dialogs, useful for testing */
 export let disableConfirmations = false;
@@ -75,6 +76,10 @@ export async function activate(context: ExtensionContext) {
 
 	checkWGEVersion();
 
+	// Start kubectl proxy for real-time streaming updates
+	setExtensionActive(true);
+	kubeProxyKeepAlive();
+
 	let api = {
 		shell: shell,
 		data: {
@@ -108,7 +113,9 @@ export function enabledWGE(): boolean {
 /**
  * Called when extension is deactivated.
  */
-export function deactivate() {
+export async function deactivate() {
+	// Clean up kubectl proxy to prevent zombie processes
+	await disposeKubeProxy();
 	telemetry?.dispose();
 	statusBar?.dispose();
 }
