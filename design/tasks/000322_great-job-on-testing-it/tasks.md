@@ -9,19 +9,19 @@
 
 ## Phase 2: Restore kubectl Proxy Infrastructure
 
-- [~] Restore `src/cli/kubernetes/kubectlProxy.ts` with proxy lifecycle management
-- [~] Restore `src/k8s/createKubeProxyConfig.ts` for building proxy KubeConfig
-- [~] Restore `src/k8s/client.ts` for creating K8s API clients
-- [ ] Add proper cleanup on extension deactivation to prevent zombie processes
-- [ ] Test proxy start/stop/restart on context switches
+- [x] Restore `src/cli/kubernetes/kubectlProxy.ts` with proxy lifecycle management
+- [x] Restore `src/k8s/createKubeProxyConfig.ts` for building proxy KubeConfig
+- [x] Restore `src/k8s/client.ts` for creating K8s API clients
+- [x] Add proper cleanup on extension deactivation to prevent zombie processes
+- [x] Test proxy start/stop/restart on context switches
 
 ## Phase 3: Restore Informers with Fixes
 
-- [ ] Restore `src/k8s/informers.ts` with Flux resource watchers
-- [ ] Add debouncing to informer event handlers (100-200ms batching)
-- [ ] Handle informer errors gracefully (stop and fall back to polling)
-- [ ] Test informers with Sources: GitRepository, HelmRepository, OCIRepository, Bucket
-- [ ] Test informers with Workloads: Kustomization, HelmRelease
+- [x] Restore `src/k8s/informers.ts` with Flux resource watchers
+- [x] Add debouncing to informer event handlers (100-200ms batching)
+- [x] Handle informer errors gracefully (stop and fall back to polling)
+- [~] Test informers with Sources: GitRepository, HelmRepository, OCIRepository, Bucket
+- [~] Test informers with Workloads: Kustomization, HelmRelease
 
 ## Phase 4: Fix TreeView Data Providers
 
