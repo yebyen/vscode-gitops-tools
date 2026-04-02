@@ -2,16 +2,16 @@
 
 ## Phase 1: Research & Preparation
 
-- [~] Study VS Code 1.85+ TreeView changes and Sticky Scroll implementation
-- [~] Review VS Code TreeDataProvider documentation for proper refresh patterns
-- [~] Extract streaming code from v0.26.0 (commit `d145e7a`) for reference
+- [x] Study VS Code 1.85+ TreeView changes and Sticky Scroll implementation
+- [x] Review VS Code TreeDataProvider documentation for proper refresh patterns
+- [x] Extract streaming code from v0.26.0 (commit `d145e7a`) for reference
 - [x] Set up test environment with VS Code 1.85+ and Flux 2.8
 
 ## Phase 2: Restore kubectl Proxy Infrastructure
 
-- [ ] Restore `src/cli/kubernetes/kubectlProxy.ts` with proxy lifecycle management
-- [ ] Restore `src/k8s/createKubeProxyConfig.ts` for building proxy KubeConfig
-- [ ] Restore `src/k8s/client.ts` for creating K8s API clients
+- [~] Restore `src/cli/kubernetes/kubectlProxy.ts` with proxy lifecycle management
+- [~] Restore `src/k8s/createKubeProxyConfig.ts` for building proxy KubeConfig
+- [~] Restore `src/k8s/client.ts` for creating K8s API clients
 - [ ] Add proper cleanup on extension deactivation to prevent zombie processes
 - [ ] Test proxy start/stop/restart on context switches
 
