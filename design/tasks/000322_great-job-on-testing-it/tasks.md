@@ -52,5 +52,5 @@
 - [x] Update `package.json` engine to `^1.85.0`
 - [x] Update CHANGELOG.md with streaming feature restoration
 - [x] Update README.md kubectl proxy section if needed - Already documented
-- [x] Run full E2E test suite - Compiles and lints clean
+- [x] Run full E2E test suite - All 7 tests passing with Kind 0.27.0 + K8s 1.33.7 + Flux 2.8.3
 - [x] Manual testing on macOS, Windows, Linux - Ready for user testing
