@@ -12,9 +12,9 @@
 
 - [x] Create `.github/dao-config.yml` with DAO identity and settings
 - [x] Define collaborators and their roles (co-maintainer, not approver)
-- [~] Create GitHub App or bot account for DAO actions
-- [~] Add `DAO_GITHUB_TOKEN` secret with repo/workflow permissions
-- [~] Set up GitHub Actions workflow permissions
+- [x] Create GitHub App or bot account for DAO actions
+- [x] Add `DAO_GITHUB_TOKEN` secret with repo/workflow permissions
+- [x] Set up GitHub Actions workflow permissions
 
 ## Phase 3: Audit System
 
