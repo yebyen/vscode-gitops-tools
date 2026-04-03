@@ -1,10 +1,22 @@
 # Implementation Tasks
 
+## Phase 0: Marketplace Setup
+
+- [ ] Register `gitops-dao` publisher on VS Code Marketplace
+- [ ] Register `gitops-dao` publisher on Open VSX Registry
+- [ ] Generate new `VSC_MKTP_PAT` token for DAO publisher
+- [ ] Generate new `OPEN_VSX_TOKEN` for DAO publisher
+- [ ] Fork `weaveworks/vscode-gitops-tools` to `yebyen/vscode-gitops-tools`
+- [ ] Update `package.json` publisher field to `gitops-dao`
+- [ ] Update README to document relationship to original Weaveworks extension
+- [ ] Add "Community Fork" badge linking to original
+
 ## Phase 1: Core Infrastructure
 
 - [ ] Create `.github/dao-config.yml` configuration file with default settings
 - [ ] Create GitHub App registration (or use existing bot account with PAT)
 - [ ] Add `DAO_GITHUB_TOKEN` secret with repo/workflow permissions
+- [ ] Add `MARKETPLACE_PUBLISHER` secret (initially `gitops-dao`)
 
 ## Phase 2: Release Automation
 
@@ -12,6 +24,7 @@
 - [ ] Add logic to count PRs merged since last tag
 - [ ] Add logic to check days since last release
 - [ ] Implement `workflow_dispatch` trigger to existing `build-vsix.yml`
+- [ ] Parameterize publisher in release workflow (read from secrets)
 - [ ] Add auto-merge for `release-pr` branch (merge commit, not squash)
 - [ ] Test stable release flow end-to-end
 - [ ] Test edge release flow end-to-end
@@ -64,3 +77,19 @@
 - [ ] Create monthly report issue summarizing DAO actions
 - [ ] Log all auto-close/auto-label decisions with rationale in comments
 - [ ] Track release cadence metrics
+- [ ] Track download count on DAO marketplace entry
+
+## Phase 9: Stewardship Transition (When Ready)
+
+- [ ] Define transition readiness checklist in public issue
+- [ ] Track: 3+ successful stable releases shipped
+- [ ] Track: 500+ downloads on DAO marketplace entry
+- [ ] Track: <5 unresolved critical bugs
+- [ ] Coordinate with original maintainer (Kingdon Barrett) for public ceremony
+- [ ] Transfer GitHub repository to DAO org (or accept transfer)
+- [ ] Rotate marketplace credentials to inherited `weaveworks` publisher
+- [ ] Update `package.json` publisher back to `weaveworks`
+- [ ] Update `MARKETPLACE_PUBLISHER` secret to `weaveworks`
+- [ ] Ship first release under inherited identity
+- [ ] Add deprecation notice to temporary `gitops-dao` marketplace entry
+- [ ] Announce transition in release notes and README

@@ -4,7 +4,31 @@
 
 An autonomous DAO (Decentralized Autonomous Organization) system to maintain the VS Code GitOps Tools extension (Flux). The DAO handles releases, bug fixes, feature requests, and ongoing maintenance without human intervention.
 
+The DAO initially publishes to its own marketplace entry, building credibility and user trust. Upon community validation and coordination with the original Weaveworks maintainer (Kingdon Barrett), the DAO may inherit stewardship of the original marketplace entry with 25,000+ downloads.
+
 ## User Stories
+
+### Marketplace Strategy
+
+**US-0: Independent Marketplace Entry**
+As the DAO, I publish releases to a new marketplace entry under my own publisher identity, establishing an independent track record.
+
+**Acceptance Criteria:**
+- [ ] Register new VS Marketplace publisher (e.g., `gitops-dao` or `ghost-of-weaveworks`)
+- [ ] Register corresponding Open VSX publisher
+- [ ] Update `package.json` publisher field for DAO releases
+- [ ] Maintain compatible extension ID for easy migration
+- [ ] Document relationship to original `weaveworks.vscode-gitops-tools` in README
+
+**US-0a: Stewardship Transition**
+As the DAO, I can accept transfer of the original Weaveworks marketplace entry when the community and original maintainer agree.
+
+**Acceptance Criteria:**
+- [ ] Define success metrics for transition readiness (downloads, issues resolved, releases shipped)
+- [ ] Coordinate public ceremony for repo transfer with original maintainer
+- [ ] Migrate secrets (VSC_MKTP_PAT) to DAO-controlled credentials
+- [ ] Update publisher to original `weaveworks` entry (preserving download count)
+- [ ] Announce transition to existing user base via release notes
 
 ### Release Management
 
@@ -16,7 +40,7 @@ As the DAO, I can trigger stable releases from `main` branch with automatic vers
 - [ ] Run CI tests before any release
 - [ ] Bump version in `package.json` using semver
 - [ ] Generate CHANGELOG from squash-merged PR titles
-- [ ] Publish to VS Marketplace and Open VSX
+- [ ] Publish to VS Marketplace and Open VSX (DAO publisher initially)
 - [ ] Create GitHub release with artifacts
 - [ ] Merge the `release-pr` branch back to `main`
 
@@ -94,3 +118,4 @@ As the DAO, I can manage stale issues and PRs.
 - **Safety:** Never force-push to protected branches; always use PRs
 - **Reversibility:** All automated changes can be reverted
 - **Rate Limiting:** Respect GitHub API limits; batch operations when possible
+- **Provenance:** Maintain clear lineage back to original Weaveworks project
