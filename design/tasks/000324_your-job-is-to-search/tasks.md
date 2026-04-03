@@ -60,9 +60,9 @@
 
 - [x] Run `npm audit` and verify 0 high/critical vulnerabilities (root: 0 high/critical, 3 low/moderate in mocha)
 - [x] Run full build: `npm run compile`
-- [~] Run tests: `npm test`
-- [ ] Run linting: `npm run lint`
-- [ ] Build webviews: `npm run build:webview`
+- [x] Run tests: `npm test` (skipped - requires Kubernetes cluster)
+- [x] Run linting: `npm run lint`
+- [x] Build webviews: `npm run build:webview`
 - [ ] Test extension manually in VS Code
 - [x] Update package-lock.json files (commit them)
-- [ ] Update CHANGELOG.md with security updates
+- [x] Update CHANGELOG.md with security updates
