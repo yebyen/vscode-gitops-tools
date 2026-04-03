@@ -2,19 +2,19 @@
 
 ## Phase 1: Repository Setup
 
-- [~] Fork `weaveworks/vscode-gitops-tools` to DAO-controlled fork
-- [~] Update README documenting the DAO co-maintainer model
-- [~] Add "Community Fork" notice explaining relationship to upstream
-- [~] Document that DAO exercises judgment and works in public
+- [x] Fork `weaveworks/vscode-gitops-tools` to DAO-controlled fork
+- [x] Update README documenting the DAO co-maintainer model
+- [x] Add "Community Fork" notice explaining relationship to upstream
+- [x] Document that DAO exercises judgment and works in public
 - [ ] Configure branch protection on `main` and `edge`
 
 ## Phase 2: Core Infrastructure
 
-- [ ] Create `.github/dao-config.yml` with DAO identity and settings
-- [ ] Define collaborators and their roles (co-maintainer, not approver)
-- [ ] Create GitHub App or bot account for DAO actions
-- [ ] Add `DAO_GITHUB_TOKEN` secret with repo/workflow permissions
-- [ ] Set up GitHub Actions workflow permissions
+- [x] Create `.github/dao-config.yml` with DAO identity and settings
+- [x] Define collaborators and their roles (co-maintainer, not approver)
+- [~] Create GitHub App or bot account for DAO actions
+- [~] Add `DAO_GITHUB_TOKEN` secret with repo/workflow permissions
+- [~] Set up GitHub Actions workflow permissions
 
 ## Phase 3: Audit System
 
@@ -99,12 +99,12 @@
 
 ## Phase 10: Documentation & Transparency
 
-- [ ] Create `.github/DAO.md` explaining:
-  - [ ] What the DAO is
-  - [ ] How it exercises judgment
-  - [ ] How it works in public
-  - [ ] The co-maintainer relationship
-  - [ ] That this is open source, not a business
+- [x] Create `.github/DAO.md` explaining:
+  - [x] What the DAO is
+  - [x] How it exercises judgment
+  - [x] How it works in public
+  - [x] The co-maintainer relationship
+  - [x] That this is open source, not a business
 - [ ] Document audit process and what it checks
 - [ ] Write user guide for manual `.vsix` installation
 - [ ] Keep CHANGELOG, README, CONTRIBUTING current
