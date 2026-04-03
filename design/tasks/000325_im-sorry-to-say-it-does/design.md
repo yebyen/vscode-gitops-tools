@@ -172,3 +172,26 @@ When authentication is required:
 2. **Parallel calls remain after auth** - Performance preserved
 3. **Graceful degradation** - Extension still works if probe fails (falls back to existing behavior)
 4. **No timeout changes** - Keep default timeouts, fix the parallelism issue instead
+
+## Implementation Notes
+
+### Files Created
+- `src/k8s/authProbe.ts` - New module with `ensureAuthenticated()`, `resetAuthState()`, and auth error detection
+
+### Files Modified
+- `src/views/dataProviders/sourceDataProvider.ts` - Added auth check before `Promise.all`
+- `src/views/dataProviders/workloadDataProvider.ts` - Added auth check before `Promise.all`
+- `src/views/treeViews.ts` - Added `resetAuthState()` calls on context/kubeconfig changes
+- `src/k8s/kubectlProxy.ts` - Added `resetAuthState()` call on proxy restart
+
+### Key Implementation Details
+- Used `kubectl version --client=false` as the auth probe command (lightweight, requires server contact)
+- Auth state is cached in module-level variables (session-scoped)
+- `authCheckInProgress` promise prevents parallel probes from running simultaneously
+- `authErrorShown` flag prevents notification spam
+- Device code patterns detected: `login.microsoft.com/device`, `DeviceCodeCredential`, `kubelogin failed`, `context deadline exceeded`
+
+### Gotchas
+- Must import `env` and `Uri` dynamically in the notification handler to avoid circular dependencies
+- Auth state must be reset in three places: context change, kubeconfig change, and proxy restart
+- The probe runs before parallel fetches, not on every individual kubectl call (preserves performance)

@@ -30,8 +30,10 @@
 
 ## Phase 5: Testing
 
-- [ ] Test with expired Azure AD tokens
-- [ ] Test with valid cached tokens (should not prompt)
-- [ ] Test context switching between clusters
-- [ ] Test cancelling device code authentication
-- [ ] Verify tree views load after successful authentication
+- [x] Tested compilation with `npm run compile`
+- [x] Tested linting with `npm run lint`
+- [N/A] Test with expired Azure AD tokens (requires Azure environment)
+- [N/A] Test with valid cached tokens (requires Azure environment)
+- [N/A] Test context switching between clusters (requires Azure environment)
+- [N/A] Test cancelling device code authentication (requires Azure environment)
+- [N/A] Verify tree views load after successful authentication (requires Azure environment)
