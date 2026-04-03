@@ -260,3 +260,48 @@ The DAO can:
 - Exercise judgment about releases
 - Work transparently in public
 - Be a reliable co-maintainer
+
+## Implementation Notes
+
+### Files Created
+
+| File | Purpose |
+|------|---------|
+| `.github/DAO.md` | Public documentation explaining the DAO model |
+| `.github/dao-config.yml` | Configuration for all DAO operational settings |
+| `.github/workflows/dao-audit.yml` | Security and code auditing (runs on PRs) |
+| `.github/workflows/dao-release.yml` | Autonomous release management |
+| `.github/workflows/dao-issue-triage.yml` | Automatic issue labeling |
+| `.github/workflows/dao-stale.yml` | Stale issue cleanup (30/60 day policy) |
+| `.github/workflows/dao-upstream-sync.yml` | Weekly upstream monitoring |
+| `.github/workflows/dao-pr-review.yml` | Automated PR review |
+| `.github/workflows/dao-dependency-check.yml` | Weekly dependency auditing |
+
+### Key Implementation Decisions
+
+1. **Used `actions/github-script` for complex logic** - Allows inline JavaScript for PR comments, label management, and decision logic without external dependencies.
+
+2. **Audit report as YAML, not JSON** - More human-readable in release notes and GitHub UI.
+
+3. **Sensitive code detection via grep patterns** - Checks for `fetch`, `http`, `request`, `fs.`, `writeFile`, `eval` patterns in diffs.
+
+4. **Reusable audit workflow** - `dao-audit.yml` uses `workflow_call` so `dao-release.yml` can invoke it before releasing.
+
+5. **Labels created dynamically** - Workflows create labels if they don't exist, avoiding manual setup.
+
+6. **Upstream treated as untrusted** - `dao-upstream-sync.yml` runs full audit on upstream changes before creating merge PR.
+
+### Schedules
+
+| Workflow | Schedule |
+|----------|----------|
+| dao-release.yml | Daily at 9am UTC (evaluates criteria) |
+| dao-stale.yml | Daily at 6am UTC |
+| dao-upstream-sync.yml | Weekly on Mondays at 8am UTC |
+| dao-dependency-check.yml | Weekly on Wednesdays at 10am UTC |
+
+### Gotchas
+
+- Branch protection must be configured manually (can't be done via workflow)
+- `GITHUB_TOKEN` has limited permissions for some operations (creating releases works fine)
+- PR comments are updated in-place to avoid spam (finds existing DAO comment and updates)
