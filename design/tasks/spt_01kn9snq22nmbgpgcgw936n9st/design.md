@@ -110,47 +110,104 @@ Add `ensureAuthenticated()` to:
 When authentication fails:
 1. `ensureAuthenticated()` returns `false`
 2. Tree providers return empty arrays
-3. User sees "Authentication required" notification (easily dismissable, not modal)
-4. Auth state is marked as "failed" - subsequent kubectl calls are blocked
-5. Auth state resets on context change OR explicit user action (refresh button)
+3. User sees **modal dialog** with clear options: "Retry" or "Give Up"
+4. "Retry" → reset auth state and try again
+5. "Give Up" → enter **dormant mode**: stop kubectl proxy, stop polling, go dark
+6. In dormant mode, user can re-activate via manual refresh or context switch
 
-## Dismissable Auth Prompt Design
+## Modal Auth Dialog Design
 
-Since Azure AD tokens last 90 days, most auth prompts are spurious (temporary network issues, token refresh in progress, etc.). The UX must accommodate this:
+When auth fails, show a modal dialog (not a dismissable notification):
 
-1. **Non-blocking notification**: Use `window.showWarningMessage()` not modal dialogs
-2. **Easy dismiss**: User can close notification without consequence
-3. **No request flood after dismiss**: Once auth fails, stop all kubectl requests until:
-   - User clicks "Retry" button in notification
-   - User manually triggers tree refresh
-   - User switches context (which resets auth state)
+```typescript
+const choice = await window.showErrorMessage(
+  'Kubernetes authentication failed. Would you like to retry or let the extension go dormant?',
+  { modal: true },
+  'Retry',
+  'Give Up'
+);
+
+if (choice === 'Retry') {
+  resetAuthState();
+  refreshAllTreeViews();
+} else {
+  // "Give Up" or dialog closed
+  enterDormantMode();
+}
+```
+
+**Rationale**: We unilaterally imposed the watcher/proxy interaction style in our fork. If it doesn't work for some users, they shouldn't be forced to uninstall. The extension should gracefully go quiet.
 
 ### Auth State Machine
 
 ```
 UNKNOWN ──(probe succeeds)──► AUTHENTICATED
     │                              │
-    │                              │ (context change)
-    └──(probe fails)──► FAILED ◄──┘
-                           │
-                           │ (user retry / refresh)
-                           ▼
-                        UNKNOWN
+    │                              │ (context change / manual refresh)
+    └──(probe fails)──► PROMPTING ─┤
+                            │      │
+              (user: Retry) │      │ (user: Give Up)
+                            ▼      ▼
+                        UNKNOWN  DORMANT
+                                   │
+                                   │ (context change / manual refresh)
+                                   ▼
+                                UNKNOWN
 ```
 
 ### Updated `authProbe.ts` State
 
 ```typescript
-type AuthState = 'unknown' | 'authenticated' | 'failed';
+type AuthState = 'unknown' | 'authenticated' | 'dormant';
 let authState: AuthState = 'unknown';
 
-export function ensureAuthenticated(): Promise<boolean> {
-  if (authState === 'authenticated') return Promise.resolve(true);
-  if (authState === 'failed') return Promise.resolve(false); // Don't retry automatically
-  // ... probe logic
+export async function ensureAuthenticated(): Promise<boolean> {
+  if (authState === 'authenticated') return true;
+  if (authState === 'dormant') return false; // Extension is dormant, don't retry
+  
+  // ... probe logic, show modal on failure
+}
+
+export function enterDormantMode() {
+  authState = 'dormant';
+  disposeKubeProxy(); // Stop the kubectl proxy
+  // Trees will show empty state
 }
 
 export function resetAuthState() {
-  authState = 'unknown'; // Allow retry
+  authState = 'unknown'; // Allow retry on next interaction
 }
 ```
+
+## Dormant Mode Behavior
+
+When the extension enters dormant mode:
+
+1. **Stop kubectl proxy**: Call `disposeKubeProxy()` to stop background connections
+2. **Stop polling**: No automatic kubectl calls
+3. **Go dark**: Tree views show empty state, no error spam
+4. **Silent until interaction**: Extension does nothing until user explicitly:
+   - Clicks refresh button on a tree view
+   - Switches kubectl context
+   - Runs a command from the command palette
+
+This ensures users don't feel forced to uninstall the extension if auth doesn't work.
+
+## Future: Non-Watcher Mode (Deferred)
+
+> **BREADCRUMB FOR FUTURE IMPLEMENTATION**
+> 
+> If we receive bug reports about the watcher/proxy machinery not working for certain users,
+> we should add a third option: "Use Manual Refresh Mode"
+> 
+> This would:
+> 1. Disable kubectl proxy entirely
+> 2. Disable informer/watcher-based updates
+> 3. Fall back to the pre-fork behavior: manual refresh button triggers kubectl calls
+> 4. Store preference in VS Code settings: `gitops.useWatcherMode: false`
+> 
+> **Why defer**: We don't want to commit to supporting this unless we get bug reports.
+> The old polling mode is less efficient but more compatible. Simple clusters may prefer it.
+> 
+> **Architecture note**: The current fix should structure `ensureAuthenticated()` and dormant mode
+> in a way that makes adding this toggle straightforward later.

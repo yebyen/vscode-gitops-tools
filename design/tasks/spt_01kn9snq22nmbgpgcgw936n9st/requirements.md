@@ -16,15 +16,22 @@ When using Azure kubelogin with EKS clusters (or any cluster requiring device co
 **I want** a single, clear notification telling me to re-authenticate  
 **So that** I understand what action to take instead of seeing dozens of confusing errors
 
-### US-3: Easily Dismissable Auth Prompt
-**As a** user with Azure AD tokens that last 90 days  
-**I want** to easily dismiss spurious authentication prompts  
-**So that** I'm not blocked when tokens resolve themselves or when I know auth will succeed shortly
-
-### US-4: Stop Requests After Auth Failure
+### US-3: Clear Auth Failure Options
 **As a** user whose authentication has failed  
-**I want** the extension to stop making kubectl requests until I explicitly retry  
-**So that** I don't see a flood of errors and can work on resolving the auth issue
+**I want** a modal dialog with clear choices: "Retry" or "Give Up"  
+**So that** I can either try again or let the extension go quiet until I'm ready to interact with it
+
+### US-4: Graceful Degradation
+**As a** user whose cluster authentication doesn't work with the watcher/proxy mode  
+**I want** the extension to stop polling and go dark rather than spam errors  
+**So that** I don't feel forced to uninstall the extension
+
+### US-5: Future Non-Watcher Mode (Deferred)
+**As a** user with a simple cluster or incompatible auth setup  
+**I want** the option to disable watcher/proxy mode and use manual refresh instead  
+**So that** I can still use the extension even if the new machinery doesn't work for me
+
+> **Note**: This is deferred for a future issue. We don't want to commit to supporting this unless we get bug reports, but the architecture should leave room for it.
 
 ## Acceptance Criteria
 
@@ -32,10 +39,11 @@ When using Azure kubelogin with EKS clusters (or any cluster requiring device co
 2. **AC-2**: Parallel kubectl API calls should wait for authentication to complete before executing
 3. **AC-3**: All tree view providers (Clusters, Sources, Workloads, Templates) must use the auth check
 4. **AC-4**: The `refreshAllTreeViews()` function should coordinate authentication before parallel refreshes
-5. **AC-5**: If authentication fails, subsequent kubectl calls should be blocked until auth state is reset
-6. **AC-6**: The authentication notification must be easily dismissable (not modal/blocking)
-7. **AC-7**: After dismissing an auth prompt, no further kubectl requests should be fired until user explicitly triggers a refresh
-8. **AC-8**: Tokens that last 90 days mean most auth prompts are spurious - the UX should accommodate this reality
+5. **AC-5**: If authentication fails, a **modal dialog** presents clear options: "Retry" or "Give Up"
+6. **AC-6**: "Retry" attempts authentication again
+7. **AC-7**: "Give Up" puts the extension in dormant mode - stops kubectl proxy, stops polling, goes dark
+8. **AC-8**: In dormant mode, user can re-activate by clicking refresh or switching context
+9. **AC-9**: The extension should never spam errors that make users want to uninstall
 
 ## Root Cause Analysis
 
