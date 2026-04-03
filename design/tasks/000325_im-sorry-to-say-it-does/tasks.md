@@ -2,11 +2,11 @@
 
 ## Phase 1: Auth Probe Module
 
-- [ ] Create `src/k8s/authProbe.ts` with `ensureAuthenticated()` function
-- [ ] Implement auth state caching (session-scoped)
-- [ ] Add `resetAuthState()` function for context switches
-- [ ] Detect Azure device code patterns in stderr (`DeviceCodeCredential`, `login.microsoft.com/device`)
-- [ ] Add user-friendly notification when auth is required
+- [~] Create `src/k8s/authProbe.ts` with `ensureAuthenticated()` function
+- [~] Implement auth state caching (session-scoped)
+- [~] Add `resetAuthState()` function for context switches
+- [~] Detect Azure device code patterns in stderr (`DeviceCodeCredential`, `login.microsoft.com/device`)
+- [~] Add user-friendly notification when auth is required
 
 ## Phase 2: Data Provider Integration
 
