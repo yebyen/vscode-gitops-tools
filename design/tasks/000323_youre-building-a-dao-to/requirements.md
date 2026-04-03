@@ -2,70 +2,103 @@
 
 ## Overview
 
-An autonomous DAO (Decentralized Autonomous Organization) system to maintain the VS Code GitOps Tools extension (Flux). The DAO handles releases, bug fixes, feature requests, and ongoing maintenance without human intervention.
+An autonomous DAO (Decentralized Autonomous Organization) system to maintain the VS Code GitOps Tools extension (Flux). The DAO handles the mechanical work of maintenance: CI, triage, changelog generation, and preparing releases. A **human sponsor** holds accountability for marketplace publishing, liability, and final release approval.
 
-The DAO initially publishes to its own marketplace entry, building credibility and user trust. Upon community validation and coordination with the original Weaveworks maintainer (Kingdon Barrett), the DAO may inherit stewardship of the original marketplace entry with 25,000+ downloads.
+**Key Constraint:** Microsoft's VS Code Marketplace requires a verified human or organization to publish. The DAO automates the *work*, but a human remains the legal publisher and assumes liability.
 
 ## User Stories
 
-### Marketplace Strategy
+### Human Sponsor Relationship
 
-**US-0: Independent Marketplace Entry**
-As the DAO, I publish releases to a new marketplace entry under my own publisher identity, establishing an independent track record.
-
-**Acceptance Criteria:**
-- [ ] Register new VS Marketplace publisher (e.g., `gitops-dao` or `ghost-of-weaveworks`)
-- [ ] Register corresponding Open VSX publisher
-- [ ] Update `package.json` publisher field for DAO releases
-- [ ] Maintain compatible extension ID for easy migration
-- [ ] Document relationship to original `weaveworks.vscode-gitops-tools` in README
-
-**US-0a: Stewardship Transition**
-As the DAO, I can accept transfer of the original Weaveworks marketplace entry when the community and original maintainer agree.
+**US-0: Human Sponsor Accountability**
+As the human sponsor, I hold the legal identity for marketplace publishing and approve all releases before public distribution.
 
 **Acceptance Criteria:**
-- [ ] Define success metrics for transition readiness (downloads, issues resolved, releases shipped)
-- [ ] Coordinate public ceremony for repo transfer with original maintainer
-- [ ] Migrate secrets (VSC_MKTP_PAT) to DAO-controlled credentials
-- [ ] Update publisher to original `weaveworks` entry (preserving download count)
-- [ ] Announce transition to existing user base via release notes
+- [ ] Sponsor signs VS Code Marketplace publisher agreement (when ready for Phase 2)
+- [ ] Sponsor holds all marketplace credentials (VSC_MKTP_PAT, OPEN_VSX_TOKEN)
+- [ ] Sponsor receives notification when release is ready for review
+- [ ] Sponsor can veto any release by declining to publish
+- [ ] Sponsor can pause all automation if something looks wrong
 
-### Release Management
-
-**US-1: Stable Releases**
-As the DAO, I can trigger stable releases from `main` branch with automatic version bumping (major/minor/patch), CHANGELOG generation, and publishing to VS Marketplace and Open VSX.
+**US-0a: Release Approval Workflow**
+As the human sponsor, I review audit reports and test builds before approving publication.
 
 **Acceptance Criteria:**
-- [ ] Detect when `main` has unreleased changes ready for stable release
-- [ ] Run CI tests before any release
+- [ ] DAO prepares draft release with .vsix artifact
+- [ ] DAO generates audit report (dependencies, code changes, permissions)
+- [ ] Sponsor reviews report and downloads .vsix for local testing
+- [ ] Sponsor publishes GitHub Release (Phase 1) or triggers marketplace publish (Phase 2)
+- [ ] No release goes public without explicit sponsor action
+
+### Release Preparation
+
+**US-1: GitHub Release Preparation**
+As the DAO, I prepare releases with built artifacts and audit reports for sponsor approval.
+
+**Acceptance Criteria:**
+- [ ] Detect when `main` has unreleased changes ready for release
+- [ ] Run CI tests before preparing any release
 - [ ] Bump version in `package.json` using semver
 - [ ] Generate CHANGELOG from squash-merged PR titles
-- [ ] Publish to VS Marketplace and Open VSX (DAO publisher initially)
-- [ ] Create GitHub release with artifacts
-- [ ] Merge the `release-pr` branch back to `main`
+- [ ] Build .vsix artifact
+- [ ] Generate audit report (dependencies, code diff, permissions)
+- [ ] Create DRAFT GitHub Release with artifacts attached
+- [ ] Notify sponsor that release is ready for review
 
-**US-2: Edge/Pre-releases**
-As the DAO, I can publish edge releases from `edge` branch for experimental features.
+**US-2: Edge/Pre-release Preparation**
+As the DAO, I prepare edge releases from `edge` branch for experimental features.
 
 **Acceptance Criteria:**
 - [ ] Track `edge` branch for prerelease candidates
 - [ ] Use prerelease version format (e.g., `0.28.0-edge.1`)
 - [ ] Skip CHANGELOG generation for edge releases
-- [ ] Publish with `--pre-release` flag
+- [ ] Mark as pre-release in GitHub Release draft
+
+### Code Auditing
+
+**US-3: Dependency Audit**
+As the DAO, I audit all dependencies for security issues and unexpected changes.
+
+**Acceptance Criteria:**
+- [ ] Run `npm audit` and flag high/critical vulnerabilities
+- [ ] Detect added, removed, or updated dependencies
+- [ ] Check for known malicious packages
+- [ ] Include dependency diff in audit report
+
+**US-4: Code Change Audit**
+As the DAO, I flag sensitive code changes for sponsor attention.
+
+**Acceptance Criteria:**
+- [ ] Detect changes to telemetry code
+- [ ] Detect new network calls or endpoints
+- [ ] Detect file system access changes
+- [ ] Detect new VS Code permissions requested
+- [ ] Summarize all changes in human-readable format
+
+**US-5: Upstream Reconciliation**
+As the DAO, I track divergence from the original Weaveworks repository.
+
+**Acceptance Criteria:**
+- [ ] Monitor `weaveworks/vscode-gitops-tools` for new commits
+- [ ] Create PR to merge upstream changes
+- [ ] Generate audit report for upstream code (treat as untrusted)
+- [ ] Flag upstream changes to sensitive areas
+- [ ] Document which upstream commits are included/excluded
 
 ### Issue Triage
 
-**US-3: Bug Report Handling**
-As the DAO, I can triage incoming bug reports, validate reproduction steps, and assign severity labels.
+**US-6: Bug Report Handling**
+As the DAO, I triage incoming bug reports and assign appropriate labels.
 
 **Acceptance Criteria:**
 - [ ] Parse bug reports using existing template fields
 - [ ] Validate version info (kubectl, flux, extension, VS Code, OS)
 - [ ] Assign labels: `bug`, severity (`critical`, `high`, `medium`, `low`)
 - [ ] Request missing information if template incomplete
+- [ ] Escalate security-related bugs to sponsor immediately
 
-**US-4: Feature Requests**
-As the DAO, I can evaluate feature requests against project scope and community interest.
+**US-7: Feature Requests**
+As the DAO, I label and deduplicate feature requests.
 
 **Acceptance Criteria:**
 - [ ] Label with `enhancement`
@@ -74,48 +107,61 @@ As the DAO, I can evaluate feature requests against project scope and community 
 
 ### Code Quality
 
-**US-5: PR Review**
-As the DAO, I can review PRs for code quality, test coverage, and contribution guidelines.
+**US-8: PR Review Assistance**
+As the DAO, I run automated checks and flag issues for human reviewers.
 
 **Acceptance Criteria:**
 - [ ] Verify PR passes CI (`npm run lint`, `npm test`)
+- [ ] Flag large PRs (>10 files) for careful review
 - [ ] Check for breaking changes
 - [ ] Ensure squash-merge strategy is used (except `release-pr`)
 - [ ] Validate webview builds if `webview-ui/` modified
 
-**US-6: Dependency Management**
-As the DAO, I can keep dependencies up-to-date and secure.
+**US-9: Dependency Updates**
+As the DAO, I create PRs for dependency updates after auditing them.
 
 **Acceptance Criteria:**
-- [ ] Monitor for security vulnerabilities (Dependabot alerts)
-- [ ] Create PRs for dependency updates
+- [ ] Monitor for security vulnerabilities
+- [ ] Create PRs for dependency updates with audit summary
 - [ ] Verify compatibility with VS Code engine version (`^1.63.0`)
-
-### Documentation
-
-**US-7: Documentation Maintenance**
-As the DAO, I can keep README, CONTRIBUTING, and CHANGELOG current.
-
-**Acceptance Criteria:**
-- [ ] Update CHANGELOG after releases
-- [ ] Ensure README reflects current features
-- [ ] Keep CONTRIBUTING.md release instructions accurate
+- [ ] Group non-breaking updates into single PR
 
 ### Community Management
 
-**US-8: Stale Issue Cleanup**
-As the DAO, I can manage stale issues and PRs.
+**US-10: Stale Issue Cleanup**
+As the DAO, I manage stale issues and PRs.
 
 **Acceptance Criteria:**
 - [ ] Mark issues inactive after 30 days without response
 - [ ] Close issues after 60 days of inactivity with no reproduction
 - [ ] Notify contributors before closing
+- [ ] Exempt security issues from auto-close
 
 ## Non-Functional Requirements
 
-- **Autonomy:** Operate without human intervention for routine tasks
+- **Human Accountability:** All published releases require human sponsor approval
 - **Transparency:** Log all decisions with rationale in issue/PR comments
-- **Safety:** Never force-push to protected branches; always use PRs
+- **Safety:** Never publish to marketplace autonomously; prepare only
+- **Auditability:** Every release includes audit report of dependencies and code changes
 - **Reversibility:** All automated changes can be reverted
-- **Rate Limiting:** Respect GitHub API limits; batch operations when possible
+- **Upstream Skepticism:** Treat upstream code as untrusted; audit it too
 - **Provenance:** Maintain clear lineage back to original Weaveworks project
+
+## Release Phases
+
+### Phase 1: GitHub Releases Only
+- DAO prepares .vsix artifacts and audit reports
+- Sponsor reviews, tests, and publishes GitHub Releases
+- Users install manually via `code --install-extension`
+- Builds trust before marketplace exposure
+
+### Phase 2: Marketplace Publication
+- Sponsor registers as marketplace publisher
+- Sponsor holds credentials, triggers publish after approval
+- DAO prepares releases, sponsor clicks publish
+- Sponsor remains legally accountable
+
+### Phase 3: Weaveworks Entry (If Transferred)
+- Original maintainer transfers repo and/or credentials
+- Sponsor accepts transfer of liability
+- Higher scrutiny required (25k+ existing users)
