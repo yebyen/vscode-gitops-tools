@@ -107,3 +107,46 @@ Add to `.github/workflows/ci.yml`:
 2. Run `npm test` to verify extension functionality
 3. Run `npm run lint` to ensure code style compliance
 4. Manual test webviews in VS Code
+
+## Implementation Notes
+
+### Breaking Changes Encountered
+
+1. **change-case v5**: `paramCase()` renamed to `kebabCase()` - simple find/replace in `src/flux/cliArgs.ts`
+
+2. **@vscode/extension-telemetry v0.9.x**: Constructor changed from `(extensionId, version, key)` to `(connectionString)`. Also `sendTelemetryException()` replaced with `sendTelemetryErrorEvent()`.
+
+3. **@kubernetes/client-node v1.x**: 
+   - `listClusterCustomObject(group, version, plural)` changed to `listClusterCustomObject({ group, version, plural })`
+   - `ListPromise` now expects `Promise<KubernetesListObject<T>>` directly, not `{response, body}`
+
+4. **glob v11**: No longer callback-based. Changed to async/await: `const files = await glob(pattern, { cwd })`
+
+5. **request module**: Deprecated and removed from kubernetes client. Replaced with native `https.get()` in `installFluxCli.ts`.
+
+6. **Vite 5.x**: Requires ESM modules. Added `"type": "module"` to webview package.json files. Removed deprecated `polyfillDynamicImport` option.
+
+7. **typescript-eslint v8**: Some stylistic rules deprecated. Removed `@typescript-eslint/indent`, `@typescript-eslint/semi`, `@typescript-eslint/comma-dangle`, `@typescript-eslint/member-delimiter-style`, `@typescript-eslint/type-annotation-spacing`, `@typescript-eslint/func-call-spacing`. Using base ESLint rules instead.
+
+### Files Modified for API Changes
+
+- `src/flux/cliArgs.ts` - change-case API
+- `src/telemetry.ts` - telemetry API
+- `src/k8s/informers.ts` - kubernetes client API
+- `src/commands/installFluxCli.ts` - replaced request with https
+- `src/test/suite/index.ts` - glob async API
+- `.eslintrc.json` - updated deprecated rules
+
+### Remaining Vulnerabilities
+
+3 vulnerabilities remain in mocha's dependencies (diff, serialize-javascript) with no fix available. These are dev-only and don't affect production code.
+
+### GitHub Actions SHA Pins Used
+
+- `actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683` (v4)
+- `actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020` (v4)
+- `fluxcd/flux2/action@8d5f40dca5aa5d3c0fc3414457dda81dd6ce3f55` (v2.4.0)
+- `coactions/setup-xvfb@e0c79e5e67d5c5dcb74b50139e97445b0004a620` (v1.0.1)
+- `HaaLeo/publish-vscode-extension@28e2d3f5817fccf23aa9f2db7c7d6b3c1f36f4b0` (v2)
+- `ncipollo/release-action@440c8c1cb0ed28b9f43e4d1d670870f059653174` (v1.16.0)
+- `repo-sync/pull-request@9f9cf0d8ad7de7b4c49a5cdc38c29ca6193b1e91` (v2.12.1)
