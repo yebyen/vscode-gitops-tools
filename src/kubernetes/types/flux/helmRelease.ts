@@ -31,7 +31,7 @@ export interface HelmRelease extends KubernetesObject {
 	readonly spec: {
 
 		/**
-		 * Chart defines the template of the v1beta1.HelmChart
+		 * Chart defines the template of the v1.HelmChart
 		 * that should be created for this HelmRelease.
 		 */
 		readonly chart: HelmChartReleaseSpec;
@@ -204,9 +204,9 @@ export interface HelmRelease extends KubernetesObject {
 }
 
 /**
- * Spec holds the template for the v1beta1.HelmChartSpec for this HelmRelease.
+ * Spec holds the template for the v1.HelmChartSpec for this HelmRelease.
  *
- * @see https://github.com/fluxcd/helm-controller/blob/main/docs/api/helmrelease.md#helm.toolkit.fluxcd.io/v2beta1.HelmChartTemplate
+ * @see https://github.com/fluxcd/helm-controller/blob/main/docs/api/v1/helmrelease.md
  */
 interface HelmChartReleaseSpec {
 
@@ -219,19 +219,19 @@ interface HelmChartReleaseSpec {
 
 		/**
 		 * Version semver expression, ignored for charts from
-		 * v1beta1.GitRepository and v1beta1.Bucket sources.
+		 * v1.GitRepository and v1.Bucket sources.
 		 * Defaults to latest when omitted.
 		 */
 		readonly version?: string;
 
 		/**
-		 * The name and namespace of the v1beta1.Source the chart is available at
+		 * The name and namespace of the v1.Source the chart is available at
 		 */
 		readonly sourceRef: NamespacedObjectKindReference;
 
 		/**
-		 * Interval at which to check the v1beta1.Source for updates.
-		 * Defaults to ‘HelmReleaseSpec.Interval’.
+		 * Interval at which to check the v1.Source for updates.
+		 * Defaults to 'HelmReleaseSpec.Interval'.
 		 */
 		readonly interval?: string;
 
