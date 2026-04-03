@@ -3,6 +3,7 @@ import { ChildProcess, spawn } from 'child_process';
 import { createK8sClients, destroyK8sClients } from './client';
 import { createProxyConfig } from './createKubeProxyConfig';
 import { output } from '../output';
+import { resetAuthState } from './authProbe';
 
 export let proxyProc: ChildProcess | undefined;
 export let kubeProxyConfig: KubeConfig | undefined;
@@ -126,6 +127,8 @@ export async function stopKubeProxy(): Promise<void> {
  * Restart kubectl proxy (used on context switches).
  */
 export async function restartKubeProxy(): Promise<void> {
+	// Reset auth state when proxy restarts - authentication may need to be re-verified
+	resetAuthState();
 	await stopKubeProxy();
 	await startKubeProxy();
 }

@@ -9,6 +9,7 @@ import { SourceNode } from '../nodes/sourceNode';
 import { DataProvider } from './dataProvider';
 import { sortByMetadataName } from '../../kubernetes/kubernetesUtils';
 import { NamespaceNode } from '../nodes/namespaceNode';
+import { ensureAuthenticated } from '../../k8s/authProbe';
 
 /**
  * Defines Sources data provider for loading Git/Helm repositories
@@ -26,6 +27,16 @@ export class SourceDataProvider extends DataProvider {
 		const treeItems: SourceNode[] = [];
 
 		setVSCodeContext(ContextTypes.LoadingSources, true);
+
+		// Ensure authentication before making parallel kubectl calls
+		// This prevents multiple device code prompts when tokens are expired
+		const isAuthed = await ensureAuthenticated();
+		if (!isAuthed) {
+			setVSCodeContext(ContextTypes.LoadingSources, false);
+			setVSCodeContext(ContextTypes.NoSources, true);
+			statusBar.stopLoadingTree();
+			return [];
+		}
 
 		// Fetch all sources asynchronously and at once
 		const [gitRepositories, ociRepositories, helmRepositories, buckets, namespaces] = await Promise.all([

@@ -15,6 +15,7 @@ import { Views } from './views';
 import * as k8s from 'vscode-kubernetes-tools-api';
 import { TemplateDataProvider } from './dataProviders/templateDataProvider';
 import { restartKubeProxy } from '../k8s/kubectlProxy';
+import { resetAuthState } from '../k8s/authProbe';
 
 export let clusterTreeViewProvider: ClusterDataProvider;
 export let sourceTreeViewProvider: SourceDataProvider;
@@ -78,6 +79,8 @@ async function refreshWhenK8sContextChange() {
 		return;
 	}
 	configuration.api.onDidChangeContext(_context => {
+		// Reset auth state when context changes - new context may have different credentials
+		resetAuthState();
 		// Restart kubectl proxy to connect to the new context
 		restartKubeProxy();
 		refreshAllTreeViews();
@@ -89,6 +92,8 @@ async function detectK8sConfigPathChange() {
 		return;
 	}
 	configuration.api.onDidChangeKubeconfigPath(_path => {
+		// Reset auth state when kubeconfig changes - credentials may have changed
+		resetAuthState();
 		// Restart kubectl proxy when kubeconfig changes
 		restartKubeProxy();
 		refreshAllTreeViews();
