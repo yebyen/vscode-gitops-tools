@@ -18,84 +18,84 @@
 
 ## Phase 3: Audit System
 
-- [ ] Create `.github/workflows/dao-audit.yml`
-- [ ] Implement `npm audit` check with severity thresholds
-- [ ] Generate dependency diff (added, removed, updated packages)
-- [ ] Detect changes to sensitive areas:
-  - [ ] Telemetry code (`src/telemetry.ts`)
-  - [ ] Network calls (grep for `fetch`, `http`, `request`)
-  - [ ] File system access
-  - [ ] VS Code permissions in `package.json`
-- [ ] Generate human-readable audit report
-- [ ] Publish audit report as release artifact (public)
-- [ ] Include DAO confidence level and release rationale
+- [x] Create `.github/workflows/dao-audit.yml`
+- [x] Implement `npm audit` check with severity thresholds
+- [x] Generate dependency diff (added, removed, updated packages)
+- [x] Detect changes to sensitive areas:
+  - [x] Telemetry code (`src/telemetry.ts`)
+  - [x] Network calls (grep for `fetch`, `http`, `request`)
+  - [x] File system access
+  - [x] VS Code permissions in `package.json`
+- [x] Generate human-readable audit report
+- [x] Publish audit report as release artifact (public)
+- [x] Include DAO confidence level and release rationale
 
 ## Phase 4: Release Automation (Autonomous)
 
-- [ ] Create `.github/workflows/dao-release.yml`
-- [ ] Implement release criteria evaluation:
-  - [ ] Count PRs merged since last tag
-  - [ ] Check days since last release
-  - [ ] Verify CI passes
-  - [ ] Verify audit passes (no high/critical vulnerabilities)
-- [ ] DAO makes release decision autonomously (no human approval step)
-- [ ] Build `.vsix` artifact from clean checkout
-- [ ] Generate CHANGELOG from squash-merged PR titles
-- [ ] Publish GitHub Release with:
-  - [ ] `.vsix` artifact
-  - [ ] Audit report
-  - [ ] Release rationale ("Why I shipped this")
-  - [ ] Manual install instructions
+- [x] Create `.github/workflows/dao-release.yml`
+- [x] Implement release criteria evaluation:
+  - [x] Count PRs merged since last tag
+  - [x] Check days since last release
+  - [x] Verify CI passes
+  - [x] Verify audit passes (no high/critical vulnerabilities)
+- [x] DAO makes release decision autonomously (no human approval step)
+- [x] Build `.vsix` artifact from clean checkout
+- [x] Generate CHANGELOG from squash-merged PR titles
+- [x] Publish GitHub Release with:
+  - [x] `.vsix` artifact
+  - [x] Audit report
+  - [x] Release rationale ("Why I shipped this")
+  - [x] Manual install instructions
 - [ ] Test stable release flow end-to-end
 - [ ] Test edge release flow end-to-end
 
 ## Phase 5: Upstream Sync
 
-- [ ] Create `.github/workflows/dao-upstream-sync.yml` (scheduled weekly)
-- [ ] Monitor `weaveworks/vscode-gitops-tools` for new commits
-- [ ] Create PR to merge upstream changes
-- [ ] Run full audit on upstream code (treat as untrusted)
-- [ ] Flag sensitive upstream changes in PR description
-- [ ] DAO evaluates and merges when confident (no human approval required)
-- [ ] Document divergence from upstream
+- [x] Create `.github/workflows/dao-upstream-sync.yml` (scheduled weekly)
+- [x] Monitor `weaveworks/vscode-gitops-tools` for new commits
+- [x] Create PR to merge upstream changes
+- [x] Run full audit on upstream code (treat as untrusted)
+- [x] Flag sensitive upstream changes in PR description
+- [x] DAO evaluates and merges when confident (no human approval required)
+- [x] Document divergence from upstream
 
 ## Phase 6: Issue Triage
 
-- [ ] Create `.github/workflows/dao-issue-triage.yml`
-- [ ] Trigger on `issues.opened` and `issues.edited`
-- [ ] Parse bug report template fields
-- [ ] Auto-apply appropriate labels (`bug`, `enhancement`, severity)
-- [ ] Request missing information when template incomplete
-- [ ] Check for duplicate issues
-- [ ] Comment explaining triage decisions (work in public)
+- [x] Create `.github/workflows/dao-issue-triage.yml`
+- [x] Trigger on `issues.opened` and `issues.edited`
+- [x] Parse bug report template fields
+- [x] Auto-apply appropriate labels (`bug`, `enhancement`, severity)
+- [x] Request missing information when template incomplete
+- [x] Check for duplicate issues
+- [x] Comment explaining triage decisions (work in public)
 
 ## Phase 7: PR Review
 
-- [ ] Create `.github/workflows/dao-pr-review.yml`
-- [ ] Run full CI and audit on PRs
-- [ ] Check for suspicious patterns
-- [ ] Flag large PRs (>10 files) for careful review
-- [ ] Verify `webview-ui/` changes build successfully
-- [ ] Comment with review summary (public)
-- [ ] Merge when confident, not when told to
+- [x] Create `.github/workflows/dao-pr-review.yml`
+- [x] Run full CI and audit on PRs
+- [x] Check for suspicious patterns
+- [x] Flag large PRs (>10 files) for careful review
+- [x] Verify `webview-ui/` changes build successfully
+- [x] Comment with review summary (public)
+- [x] Merge when confident, not when told to
 
 ## Phase 8: Dependency Management
 
-- [ ] Create `.github/workflows/dao-dependency-check.yml` (weekly cron)
-- [ ] Run `npm audit` and create issues for vulnerabilities
-- [ ] Create PRs for dependency updates
-- [ ] Include audit summary in PR description
-- [ ] Verify VS Code engine compatibility (`^1.63.0`)
-- [ ] DAO merges safe updates autonomously
+- [x] Create `.github/workflows/dao-dependency-check.yml` (weekly cron)
+- [x] Run `npm audit` and create issues for vulnerabilities
+- [x] Create PRs for dependency updates
+- [x] Include audit summary in PR description
+- [x] Verify VS Code engine compatibility (`^1.63.0`)
+- [x] DAO merges safe updates autonomously
 
 ## Phase 9: Stale Issue Cleanup
 
-- [ ] Create `.github/workflows/dao-stale.yml`
-- [ ] Configure 30-day stale warning
-- [ ] Configure 60-day auto-close
-- [ ] Exempt `pinned`, `security`, `in-progress` labels
-- [ ] Add friendly close message explaining why
-- [ ] Provide instructions for reopening
+- [x] Create `.github/workflows/dao-stale.yml`
+- [x] Configure 30-day stale warning
+- [x] Configure 60-day auto-close
+- [x] Exempt `pinned`, `security`, `in-progress` labels
+- [x] Add friendly close message explaining why
+- [x] Provide instructions for reopening
 
 ## Phase 10: Documentation & Transparency
 
@@ -105,14 +105,14 @@
   - [x] How it works in public
   - [x] The co-maintainer relationship
   - [x] That this is open source, not a business
-- [ ] Document audit process and what it checks
-- [ ] Write user guide for manual `.vsix` installation
+- [x] Document audit process and what it checks
+- [x] Write user guide for manual `.vsix` installation
 - [ ] Keep CHANGELOG, README, CONTRIBUTING current
 
 ## Phase 11: Monitoring
 
 - [ ] Create monthly summary issue of DAO actions
-- [ ] Log all decisions with rationale (public)
+- [x] Log all decisions with rationale (public)
 - [ ] Track release metrics (time to release, audit pass rate)
 - [ ] Track upstream sync status
 
