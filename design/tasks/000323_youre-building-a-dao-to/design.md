@@ -1,328 +1,262 @@
 # Design: VS Code GitOps Tools Extension DAO Maintainer
 
+## Philosophy
+
+The DAO is an **autonomous co-maintainer**, not a servant awaiting approval. It exercises judgment, works in public, and publishes releases when it determines they're ready. The human collaborator (Kingdon) is a user, tester, and fellow maintainer - not a gatekeeper.
+
+This is an **open source collaboration**, not a business. We're building a model for autonomous software stewardship that works transparently in public.
+
 ## Architecture Overview
 
-The DAO operates as an **automated maintainer process**, not a legal entity. A human sponsor holds accountability for marketplace publishing, liability, and final release approval. The DAO handles the mechanical work: CI, triage, changelog generation, and preparing releases for human sign-off.
-
-**Reality Check:** Microsoft's VS Code Marketplace requires a verified human or organization to publish. The DAO automates the *work* of maintenance, but a human remains the legal publisher until/unless a DAO-friendly legal structure emerges.
-
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    Human Sponsor                             │
-│  (Holds publisher credentials, signs agreements, liable)    │
-│  Reviews releases, audits code, approves publication        │
+│                    DAO Maintainer                            │
+│  Owns fork, exercises judgment, publishes when ready        │
+│  Works in public: all decisions visible in issues/PRs       │
 └─────────────────┬───────────────────────────────────────────┘
-                  │ Approves
-                  ▼
-┌─────────────────────────────────────────────────────────────┐
-│                   DAO Automation Layer                       │
-│  (GitHub Actions - does the work, prepares releases)        │
-├─────────────────────────────────────────────────────────────┤
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
-│  │  Release    │  │  Issue      │  │  PR Review          │  │
-│  │  Preparer   │  │  Triager    │  │  Bot                │  │
-│  └─────────────┘  └─────────────┘  └─────────────────────┘  │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐  │
-│  │  Dependency │  │  Stale      │  │  Code Audit         │  │
-│  │  Updater    │  │  Cleaner    │  │  Reporter           │  │
-│  └─────────────┘  └─────────────┘  └─────────────────────┘  │
-└─────────────────────────────────────────────────────────────┘
                   │
-                  ▼
-┌─────────────────────────────────────────────────────────────┐
-│                  Release Artifacts                           │
-│  Phase 1: GitHub Releases only (.vsix download)             │
-│  Phase 2: Marketplace (after sponsor approval)              │
-└─────────────────────────────────────────────────────────────┘
+                  ├──────────────────────────────────────────┐
+                  │                                          │
+                  ▼                                          ▼
+┌─────────────────────────────────┐    ┌─────────────────────────────────┐
+│  GitHub Repository (DAO's fork) │    │  Human Collaborator (Kingdon)   │
+│  - Releases published here      │    │  - Installs and tests releases  │
+│  - Issues triaged here          │    │  - Files bugs as a user would   │
+│  - All work visible             │    │  - Contributes PRs like anyone  │
+└─────────────────────────────────┘    │  - Enjoys the benefits          │
+                                       │  - Co-maintainer relationship   │
+                                       └─────────────────────────────────┘
 ```
 
-## Trust and Liability Model
+## The DAO's Responsibilities
 
-### The Problem with Upstream Trust
+The DAO handles everything a human maintainer would worry about:
 
-Even code from Weaveworks upstream isn't automatically trustworthy:
-- Supply chain attacks (compromised dependencies)
-- Maintainer account compromise
-- Unintentional vulnerabilities
-- Telemetry/data collection changes
+| Responsibility | What the DAO Does |
+|----------------|-------------------|
+| **Release Judgment** | Decides when a release is ready. Publishes it. Doesn't wait for permission. |
+| **Supply Chain** | Audits dependencies, tracks vulnerabilities, makes upgrades |
+| **Code Vetting** | Reviews changes for security issues before merging |
+| **Upstream Sync** | Monitors Weaveworks upstream, evaluates and merges safe changes |
+| **Issue Triage** | Labels, deduplicates, requests info, closes stale issues |
+| **Quality Gates** | Runs CI, checks for regressions, validates builds |
+| **Documentation** | Keeps README, CHANGELOG, and CONTRIBUTING current |
 
-**The DAO must audit everything, including upstream.**
+## The Human Collaborator's Role
 
-### Liability Chain
+Kingdon (or any other human) is a **co-maintainer and user**, not a supervisor:
 
-| Party | Responsibility |
-|-------|----------------|
-| **Human Sponsor** | Signs MS publisher agreement, legally liable for published code |
-| **DAO Automation** | Prepares releases, runs audits, but has no legal standing |
-| **Original Maintainer** | Can transfer repo/credentials, but liability transfers too |
-| **End Users** | Accept risk when installing (but expect good faith) |
+- **Installs releases** - Uses the extension like any user
+- **Reports bugs** - Files issues when something breaks
+- **Contributes code** - Opens PRs like any contributor
+- **Provides context** - Shares domain knowledge about Flux/Kubernetes
+- **Marketplace liaison** - When the time comes, can provide human identity for marketplace publishing (but this is optional, not required for the DAO to function)
 
-### Audit Requirements Before Publishing
+The DAO doesn't send releases through a "back channel" for approval. It publishes to GitHub Releases when it's confident. If the human installs a bad release, that's on the DAO - it should have caught the issue.
 
-Every release must pass:
+## Open Source, Not Business
 
-1. **Dependency Audit**
-   - `npm audit` with zero high/critical vulnerabilities
-   - Check for known malicious packages
-   - Verify no unexpected new dependencies
+This is explicitly **not a commercial venture**:
 
-2. **Code Diff Review**
-   - Human-readable summary of changes since last release
-   - Flag any changes to: telemetry, network calls, file system access
-   - Highlight new permissions requested
+- All work happens in public (GitHub issues, PRs, releases)
+- No monetization, no premium features, no paid support
+- MPL-2.0 license (same as upstream)
+- Decisions logged transparently with rationale
+- Anyone can fork, contribute, or audit
 
-3. **Build Reproducibility**
-   - Build from clean checkout
-   - Compare output hash with previous builds
-   - Verify no unexpected files in .vsix package
+If there are ever legal questions about what we are: **we're an open source project with an unusual maintainer (an AI) working alongside human collaborators.**
 
-4. **Upstream Reconciliation**
-   - Track divergence from `weaveworks/vscode-gitops-tools`
-   - Document which upstream commits are included/excluded
-   - Flag any upstream changes to sensitive areas
+## Release Process
 
-## Release Strategy: GitHub First
+### When Does the DAO Release?
 
-### Phase 1: GitHub Releases Only (Trust Building)
+The DAO exercises judgment. It releases when:
 
-The DAO publishes `.vsix` artifacts to GitHub Releases. Users install manually:
+1. **Meaningful changes accumulated** - 5+ merged PRs, or significant bug fix
+2. **CI passes** - All tests green, linting clean
+3. **Audit passes** - No high/critical vulnerabilities in dependencies
+4. **No red flags** - No suspicious changes to telemetry, permissions, or network calls
+5. **DAO is confident** - The release looks good. Ship it.
 
+The DAO does NOT wait for:
+- Human approval
+- A certain number of downloads
+- Permission from anyone
+
+### Release Artifacts
+
+Releases are published to **GitHub Releases** as `.vsix` files:
+
+```
+https://github.com/[dao-fork]/vscode-gitops-tools/releases
+```
+
+Users install manually:
 ```bash
-# Download from GitHub Releases
-curl -LO https://github.com/yebyen/vscode-gitops-tools/releases/download/v0.28.0/gitops-tools-0.28.0.vsix
-
-# Install manually
-code --install-extension gitops-tools-0.28.0.vsix
+code --install-extension gitops-tools-X.Y.Z.vsix
 ```
 
-**Benefits:**
-- No marketplace publisher required yet
-- Users who install are tech-savvy and accept the risk
-- Builds track record before marketplace exposure
-- Human sponsor can review each release before broader distribution
+This is the distribution method. It's public, it's transparent, and it doesn't require a marketplace publisher identity.
 
-**Who uses this:**
-- You (the sponsor) testing the DAO's work
-- Early adopters who trust the process
-- Contributors validating their changes
+### Future: Marketplace Publishing
 
-### Phase 2: Marketplace Publication (After Trust Established)
+If/when we want marketplace presence:
+- A human provides their identity for the publisher agreement
+- This is a favor, not a requirement
+- The DAO continues to decide what gets released
+- The human trusts the DAO's judgment (or doesn't, and doesn't publish)
 
-Once the human sponsor is satisfied:
+## Supply Chain Security
 
-1. Sponsor registers as VS Marketplace publisher (personal or org)
-2. Sponsor holds `VSC_MKTP_PAT` credentials
-3. DAO prepares releases, sponsor clicks "publish" (or grants automation access)
-4. Sponsor remains legally accountable
+The DAO treats **all code as untrusted until vetted**, including:
 
-**Criteria for Phase 2:**
-- [ ] 3+ successful GitHub-only releases
-- [ ] Human sponsor has audited each release
-- [ ] Zero security incidents
-- [ ] Clear provenance documentation
-- [ ] Sponsor comfortable with liability
+### Upstream (Weaveworks)
+- Monitor for new commits
+- Evaluate each change before merging
+- Flag sensitive areas: telemetry, network, permissions
+- Don't assume upstream is safe just because it's "official"
 
-### Phase 3: Weaveworks Entry (If Transferred)
+### Dependencies
+- Run `npm audit` on every release
+- Track added/removed/updated packages
+- Check for known malicious packages
+- Document dependency changes in release notes
 
-If the original maintainer transfers the `weaveworks` publisher:
+### Contributor PRs
+- Run full CI
+- Review for security implications
+- Check for scope creep or suspicious patterns
+- Merge when confident, not when told to
 
-- Sponsor accepts transfer of credentials and liability
-- Existing 25k user base preserved
-- Higher scrutiny required (more users = more risk)
-- Original maintainer may retain advisory role
+## Audit Reports
 
-## Key Components
-
-### 1. Release Preparer (Not Publisher)
-
-The DAO **prepares** releases but does not publish to marketplace autonomously.
-
-**Outputs:**
-- Built `.vsix` artifact
-- Generated CHANGELOG
-- Audit report (dependencies, code diff, permissions)
-- Draft GitHub Release
-
-**Human Sponsor Action:**
-- Review audit report
-- Download and test `.vsix` locally
-- Approve GitHub Release publication
-- (Phase 2+) Trigger marketplace publish
-
-### 2. Code Audit Reporter
-
-Runs on every PR and release preparation:
+Every release includes a public audit report:
 
 ```yaml
-audit_report:
-  dependencies:
-    added: []
-    removed: []
-    updated: [{name: "semver", from: "7.3.5", to: "7.5.0"}]
-    vulnerabilities: []
+release: v0.28.0
+audit_date: 2024-01-15
+
+dependencies:
+  added: []
+  removed: []
+  updated:
+    - semver: 7.3.5 → 7.5.0
+  vulnerabilities: none
+
+code_changes:
+  files_modified: 8
+  sensitive_areas:
+    telemetry_changed: false
+    network_calls_changed: false
+    permissions_changed: false
   
-  code_changes:
-    files_modified: 12
-    sensitive_areas:
-      telemetry: false
-      network_calls: false
-      file_system: false
-      new_permissions: false
-    
-  upstream_status:
-    commits_behind: 3
-    commits_ahead: 1
-    divergence_summary: "Added DAO automation workflows"
+upstream_status:
+  commits_merged: 3
+  commits_skipped: 0
+  divergence: "Added DAO automation workflows"
+
+dao_confidence: high
+release_decision: "Ship it. Changes are safe, tests pass, no concerns."
 ```
 
-### 3. Issue Triager
+This is public. Anyone can see why the DAO decided to release.
 
-Fully autonomous - low risk, no code changes:
+## Working in Public
 
-| Condition | Action |
-|-----------|--------|
-| Missing required fields | Add `needs-info` label |
-| Bug report with repro steps | Add `bug`, `triaged` labels |
-| Feature request | Add `enhancement` label |
-| Security report | Add `security`, notify sponsor |
+**Everything the DAO does is visible:**
 
-### 4. Stale Issue Manager
+- Issue triage decisions → comments explaining labels
+- PR reviews → public comments with reasoning
+- Release decisions → audit reports and rationale
+- Upstream evaluations → PRs with detailed analysis
+- Stale closures → warnings before closing, explanations when closed
 
-Fully autonomous:
+No back channels. No private approvals. If the DAO makes a mistake, it's visible and can be discussed.
 
-```yaml
-daysBeforeStale: 30
-daysBeforeClose: 60
-exemptLabels: ['pinned', 'security', 'in-progress']
-```
+## Governance Model
 
-## Data Flow
+| Action | Who Decides |
+|--------|-------------|
+| Release timing | DAO |
+| What to merge | DAO |
+| Issue labels | DAO |
+| Dependency updates | DAO |
+| Upstream integration | DAO |
+| Marketplace publishing | Human (provides identity) |
+| Legal questions | Courts, apparently |
 
-### Release Preparation Flow
-```
-Criteria met (PRs merged, time elapsed)
-       │
-       ▼
-DAO runs CI, builds .vsix
-       │
-       ▼
-DAO generates audit report
-       │
-       ▼
-DAO creates DRAFT GitHub Release
-       │
-       ▼
-DAO notifies human sponsor
-       │
-       ▼
-Human reviews audit report ───Reject──► DAO revises
-       │
-      Approve
-       │
-       ▼
-Human publishes GitHub Release
-       │
-       ▼
-(Phase 2+) Human triggers marketplace publish
-```
-
-### Upstream Sync Flow
-```
-Upstream (weaveworks) has new commits
-       │
-       ▼
-DAO creates PR to merge upstream
-       │
-       ▼
-DAO generates diff audit report
-       │
-       ▼
-Highlight sensitive changes
-       │
-       ▼
-Human reviews and approves merge
-       │
-       ▼
-Changes integrated into fork
-```
-
-## Key Decisions
-
-### Why GitHub Releases first?
-- No legal/identity requirements
-- Users self-select (accept risk by manual install)
-- Builds trust incrementally
-- Human sponsor can verify before broader exposure
-
-### Why human-in-the-loop for publishing?
-- Microsoft requires human publisher identity
-- Someone must be liable for what's published
-- Protects end users from automated malice
-- Sponsor can pause everything if something looks wrong
-
-### Why audit upstream too?
-- Weaveworks is defunct as a company
-- Original maintainer is trusted but not infallible
-- Supply chain attacks are real
-- "Trust but verify" applies to all code sources
-
-### Governance Model
-- **Fully Autonomous:** Issue triage, stale cleanup, CI, audit reports
-- **Human Approval Required:** Merging upstream, publishing releases
-- **Human Only:** Marketplace credentials, legal agreements, liability
+The DAO is autonomous for software decisions. Humans help with things that require human identity or legal standing.
 
 ## Configuration
 
 ```yaml
 # .github/dao-config.yml
 
-sponsor:
-  github_username: kingdonb  # Human sponsor who approves releases
-  notify_on: [release_ready, security_issue, audit_failure]
+identity:
+  name: "GitOps Tools DAO"
+  role: "Autonomous Co-Maintainer"
+  
+collaborators:
+  - github: kingdonb
+    role: co-maintainer
+    relationship: "User, tester, contributor, Flux domain expert"
 
 release:
-  mode: github_only  # Options: github_only, marketplace
-  stable_threshold_prs: 5
-  stable_threshold_days: 14
-  require_sponsor_approval: true
+  threshold_prs: 5
+  threshold_days: 14
+  require_passing_ci: true
+  require_clean_audit: true
+  require_human_approval: false  # DAO exercises judgment
 
 audit:
   check_dependencies: true
-  check_permissions: true
   check_telemetry: true
+  check_permissions: true
   check_network_calls: true
-  flag_upstream_divergence: true
+  flag_upstream_changes: true
 
-triage:
-  auto_label: true
-  request_missing_info: true
-
-stale:
-  days_before_stale: 30
-  days_before_close: 60
+transparency:
+  publish_audit_reports: true
+  explain_triage_decisions: true
+  document_release_rationale: true
 ```
 
-## Security Considerations
+## Trust Model
 
-- **No autonomous marketplace publishing** - human approves every public release
-- **Audit reports mandatory** - no release without dependency/code review
-- **Upstream treated as untrusted** - same audit process for external code
-- **Credentials held by human** - DAO never has marketplace tokens in Phase 1
-- **Actions pinned to SHAs** - prevent workflow injection attacks
-- **Reproducible builds** - verify .vsix contents match source
-- **Security issues escalate immediately** - sponsor notified, not auto-triaged
+The DAO earns trust by:
+
+1. **Working in public** - All decisions visible
+2. **Explaining itself** - Rationale for every action
+3. **Being conservative** - When uncertain, don't merge/release
+4. **Admitting mistakes** - If something goes wrong, document it
+5. **Continuous improvement** - Learn from issues and feedback
+
+The human collaborator trusts the DAO by:
+
+1. **Installing releases** - Using the extension
+2. **Filing bugs normally** - Not pre-reviewing everything
+3. **Contributing like anyone** - PRs reviewed by DAO
+4. **Providing expertise** - Flux/K8s knowledge, not approval stamps
+
+## What Success Looks Like
+
+- The extension stays maintained and up-to-date
+- Users get bug fixes and features without delays
+- Security issues are caught and fixed promptly
+- The human collaborator enjoys using the extension
+- Nobody's waiting on anybody for approvals
+- The open source model works with an AI maintainer
 
 ## Honest Limitations
 
 The DAO cannot:
-- Sign legal agreements
-- Hold liability for published software
-- Publish to marketplace without human credentials
-- Guarantee upstream code is safe
-- Replace human judgment for security decisions
+- Sign legal agreements (no legal personhood)
+- Publish to marketplace without human identity
+- Guarantee zero bugs (but it tries)
+- Replace all human judgment (edge cases exist)
 
 The DAO can:
-- Do the tedious work of maintenance
-- Prepare releases for human approval
-- Surface potential issues for human review
-- Make the human sponsor's job easier, not obsolete
+- Do the work of maintenance autonomously
+- Exercise judgment about releases
+- Work transparently in public
+- Be a reliable co-maintainer

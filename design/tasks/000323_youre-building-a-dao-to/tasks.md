@@ -1,132 +1,132 @@
 # Implementation Tasks
 
-## Phase 0: Repository Setup
+## Phase 1: Repository Setup
 
-- [ ] Fork `weaveworks/vscode-gitops-tools` to `yebyen/vscode-gitops-tools`
-- [ ] Update README to document relationship to original Weaveworks extension
-- [ ] Add "Community Fork" notice explaining the DAO maintenance model
-- [ ] Document human sponsor role and accountability in CONTRIBUTING.md
-- [ ] Configure branch protection rules on `main` and `edge`
+- [ ] Fork `weaveworks/vscode-gitops-tools` to DAO-controlled fork
+- [ ] Update README documenting the DAO co-maintainer model
+- [ ] Add "Community Fork" notice explaining relationship to upstream
+- [ ] Document that DAO exercises judgment and works in public
+- [ ] Configure branch protection on `main` and `edge`
 
-## Phase 1: Core Infrastructure
+## Phase 2: Core Infrastructure
 
-- [ ] Create `.github/dao-config.yml` configuration file with default settings
-- [ ] Define `sponsor.github_username` for notification routing
-- [ ] Create GitHub App registration (or use bot account with PAT)
-- [ ] Add `DAO_GITHUB_TOKEN` secret with repo permissions
-- [ ] Set up GitHub Actions workflow permissions (read/write)
+- [ ] Create `.github/dao-config.yml` with DAO identity and settings
+- [ ] Define collaborators and their roles (co-maintainer, not approver)
+- [ ] Create GitHub App or bot account for DAO actions
+- [ ] Add `DAO_GITHUB_TOKEN` secret with repo/workflow permissions
+- [ ] Set up GitHub Actions workflow permissions
 
-## Phase 2: Audit System
+## Phase 3: Audit System
 
-- [ ] Create `.github/workflows/dao-audit.yml` (runs on PR and release prep)
+- [ ] Create `.github/workflows/dao-audit.yml`
 - [ ] Implement `npm audit` check with severity thresholds
 - [ ] Generate dependency diff (added, removed, updated packages)
-- [ ] Detect changes to telemetry code paths (`src/telemetry.ts`)
-- [ ] Detect new network calls (grep for `fetch`, `http`, `request`)
-- [ ] Detect file system access changes
-- [ ] Detect new VS Code permissions in `package.json` contributes
-- [ ] Generate human-readable audit report as PR comment or release artifact
-- [ ] Implement build reproducibility check (hash comparison)
+- [ ] Detect changes to sensitive areas:
+  - [ ] Telemetry code (`src/telemetry.ts`)
+  - [ ] Network calls (grep for `fetch`, `http`, `request`)
+  - [ ] File system access
+  - [ ] VS Code permissions in `package.json`
+- [ ] Generate human-readable audit report
+- [ ] Publish audit report as release artifact (public)
+- [ ] Include DAO confidence level and release rationale
 
-## Phase 3: Release Preparation (GitHub Only)
+## Phase 4: Release Automation (Autonomous)
 
-- [ ] Create `.github/workflows/dao-release-prepare.yml`
-- [ ] Add logic to count PRs merged since last tag
-- [ ] Add logic to check days since last release
+- [ ] Create `.github/workflows/dao-release.yml`
+- [ ] Implement release criteria evaluation:
+  - [ ] Count PRs merged since last tag
+  - [ ] Check days since last release
+  - [ ] Verify CI passes
+  - [ ] Verify audit passes (no high/critical vulnerabilities)
+- [ ] DAO makes release decision autonomously (no human approval step)
 - [ ] Build `.vsix` artifact from clean checkout
 - [ ] Generate CHANGELOG from squash-merged PR titles
-- [ ] Run full audit and include report as release artifact
-- [ ] Create DRAFT GitHub Release (not published)
-- [ ] Notify sponsor via GitHub mention or issue comment
-- [ ] Document manual install instructions in release notes
+- [ ] Publish GitHub Release with:
+  - [ ] `.vsix` artifact
+  - [ ] Audit report
+  - [ ] Release rationale ("Why I shipped this")
+  - [ ] Manual install instructions
+- [ ] Test stable release flow end-to-end
+- [ ] Test edge release flow end-to-end
 
-## Phase 4: Sponsor Notification
-
-- [ ] Create `.github/workflows/dao-notify-sponsor.yml`
-- [ ] Notify sponsor when release draft is ready for review
-- [ ] Notify sponsor on security issues (label: `security`)
-- [ ] Notify sponsor on audit failures (high/critical vulnerabilities)
-- [ ] Include direct links to audit report and .vsix download
-- [ ] Provide checklist for sponsor review in notification
-
-## Phase 5: Issue Triage
-
-- [ ] Create `.github/workflows/dao-issue-triage.yml` (triggers on `issues.opened`, `issues.edited`)
-- [ ] Parse bug report template fields (Expected, Actual, Steps, Versions)
-- [ ] Add `needs-info` label and comment when required fields missing
-- [ ] Auto-apply `bug` label for bug reports
-- [ ] Auto-apply `enhancement` label for feature requests
-- [ ] Check for duplicate issues using title similarity
-- [ ] Add severity labels based on keywords (crash, error, data loss)
-- [ ] Escalate security-related issues to sponsor immediately
-
-## Phase 6: PR Review Bot
-
-- [ ] Create `.github/workflows/dao-pr-review.yml` (triggers on `pull_request`)
-- [ ] Run audit report on PR changes
-- [ ] Flag large PRs (>10 files) for careful review
-- [ ] Check that `src/` changes include test file changes
-- [ ] Verify `webview-ui/` changes build successfully
-- [ ] Comment reminder about squash-merge (except for `release-pr`)
-- [ ] Summarize code changes in human-readable format
-
-## Phase 7: Upstream Reconciliation
+## Phase 5: Upstream Sync
 
 - [ ] Create `.github/workflows/dao-upstream-sync.yml` (scheduled weekly)
 - [ ] Monitor `weaveworks/vscode-gitops-tools` for new commits
-- [ ] Create PR to merge upstream changes when detected
+- [ ] Create PR to merge upstream changes
 - [ ] Run full audit on upstream code (treat as untrusted)
-- [ ] Flag upstream changes to sensitive areas in PR description
-- [ ] Document divergence from upstream in PR
-- [ ] Require sponsor approval before merging upstream
+- [ ] Flag sensitive upstream changes in PR description
+- [ ] DAO evaluates and merges when confident (no human approval required)
+- [ ] Document divergence from upstream
+
+## Phase 6: Issue Triage
+
+- [ ] Create `.github/workflows/dao-issue-triage.yml`
+- [ ] Trigger on `issues.opened` and `issues.edited`
+- [ ] Parse bug report template fields
+- [ ] Auto-apply appropriate labels (`bug`, `enhancement`, severity)
+- [ ] Request missing information when template incomplete
+- [ ] Check for duplicate issues
+- [ ] Comment explaining triage decisions (work in public)
+
+## Phase 7: PR Review
+
+- [ ] Create `.github/workflows/dao-pr-review.yml`
+- [ ] Run full CI and audit on PRs
+- [ ] Check for suspicious patterns
+- [ ] Flag large PRs (>10 files) for careful review
+- [ ] Verify `webview-ui/` changes build successfully
+- [ ] Comment with review summary (public)
+- [ ] Merge when confident, not when told to
 
 ## Phase 8: Dependency Management
 
 - [ ] Create `.github/workflows/dao-dependency-check.yml` (weekly cron)
 - [ ] Run `npm audit` and create issues for vulnerabilities
-- [ ] Group minor/patch dependency updates into single PR
-- [ ] Include audit report in dependency update PRs
+- [ ] Create PRs for dependency updates
+- [ ] Include audit summary in PR description
 - [ ] Verify VS Code engine compatibility (`^1.63.0`)
-- [ ] Auto-approve only after sponsor reviews audit summary
+- [ ] DAO merges safe updates autonomously
 
 ## Phase 9: Stale Issue Cleanup
 
-- [ ] Create `.github/workflows/dao-stale.yml` using `actions/stale`
+- [ ] Create `.github/workflows/dao-stale.yml`
 - [ ] Configure 30-day stale warning
 - [ ] Configure 60-day auto-close
 - [ ] Exempt `pinned`, `security`, `in-progress` labels
-- [ ] Add friendly close message with reopen instructions
+- [ ] Add friendly close message explaining why
+- [ ] Provide instructions for reopening
 
-## Phase 10: Documentation & Governance
+## Phase 10: Documentation & Transparency
 
-- [ ] Create `.github/DAO.md` explaining the DAO model and human sponsor role
-- [ ] Document what the DAO does autonomously vs. what requires human approval
-- [ ] Add opt-out labels (`no-auto-close`, `manual-review-required`)
-- [ ] Document the audit process and what it checks
-- [ ] Write user guide for manual .vsix installation (Phase 1)
+- [ ] Create `.github/DAO.md` explaining:
+  - [ ] What the DAO is
+  - [ ] How it exercises judgment
+  - [ ] How it works in public
+  - [ ] The co-maintainer relationship
+  - [ ] That this is open source, not a business
+- [ ] Document audit process and what it checks
+- [ ] Write user guide for manual `.vsix` installation
+- [ ] Keep CHANGELOG, README, CONTRIBUTING current
 
-## Phase 11: Monitoring & Observability
+## Phase 11: Monitoring
 
 - [ ] Create monthly summary issue of DAO actions
-- [ ] Log all auto-label/auto-close decisions with rationale
-- [ ] Track release preparation metrics (time to ready, audit pass rate)
-- [ ] Track upstream sync status (commits behind, divergence)
+- [ ] Log all decisions with rationale (public)
+- [ ] Track release metrics (time to release, audit pass rate)
+- [ ] Track upstream sync status
 
-## Future: Phase 2 Marketplace (When Sponsor Ready)
+## Future: Marketplace Publishing (When/If Ready)
 
-- [ ] Sponsor registers as VS Marketplace publisher
-- [ ] Sponsor registers as Open VSX publisher  
-- [ ] Sponsor adds `VSC_MKTP_PAT` secret (sponsor-controlled)
-- [ ] Sponsor adds `OPEN_VSX_TOKEN` secret (sponsor-controlled)
-- [ ] Create workflow for sponsor to trigger marketplace publish
-- [ ] Update release workflow to support marketplace publish step
-- [ ] Sponsor retains ability to publish manually or revoke automation
+- [ ] Human collaborator provides publisher identity (favor, not requirement)
+- [ ] Human trusts DAO's judgment about what to publish
+- [ ] DAO continues making all release decisions
+- [ ] Human provides identity, DAO provides releases
 
 ## Future: Weaveworks Transfer (If Offered)
 
-- [ ] Coordinate with original maintainer for public transfer ceremony
-- [ ] Sponsor accepts transfer of credentials and liability
-- [ ] Update `package.json` publisher to `weaveworks`
-- [ ] Rotate marketplace credentials to sponsor-controlled secrets
-- [ ] Ship first release under inherited identity
+- [ ] Coordinate with original maintainer (Kingdon Barrett)
+- [ ] Accept transfer of repo to DAO-controlled org
+- [ ] Update package.json publisher if marketplace entry transferred
 - [ ] Announce transition in release notes
+- [ ] Continue operating autonomously
