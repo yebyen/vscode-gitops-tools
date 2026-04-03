@@ -110,5 +110,47 @@ Add `ensureAuthenticated()` to:
 When authentication fails:
 1. `ensureAuthenticated()` returns `false`
 2. Tree providers return empty arrays
-3. User sees "Authentication required" notification (already implemented)
-4. Auth state resets on context change (already implemented)
+3. User sees "Authentication required" notification (easily dismissable, not modal)
+4. Auth state is marked as "failed" - subsequent kubectl calls are blocked
+5. Auth state resets on context change OR explicit user action (refresh button)
+
+## Dismissable Auth Prompt Design
+
+Since Azure AD tokens last 90 days, most auth prompts are spurious (temporary network issues, token refresh in progress, etc.). The UX must accommodate this:
+
+1. **Non-blocking notification**: Use `window.showWarningMessage()` not modal dialogs
+2. **Easy dismiss**: User can close notification without consequence
+3. **No request flood after dismiss**: Once auth fails, stop all kubectl requests until:
+   - User clicks "Retry" button in notification
+   - User manually triggers tree refresh
+   - User switches context (which resets auth state)
+
+### Auth State Machine
+
+```
+UNKNOWN ──(probe succeeds)──► AUTHENTICATED
+    │                              │
+    │                              │ (context change)
+    └──(probe fails)──► FAILED ◄──┘
+                           │
+                           │ (user retry / refresh)
+                           ▼
+                        UNKNOWN
+```
+
+### Updated `authProbe.ts` State
+
+```typescript
+type AuthState = 'unknown' | 'authenticated' | 'failed';
+let authState: AuthState = 'unknown';
+
+export function ensureAuthenticated(): Promise<boolean> {
+  if (authState === 'authenticated') return Promise.resolve(true);
+  if (authState === 'failed') return Promise.resolve(false); // Don't retry automatically
+  // ... probe logic
+}
+
+export function resetAuthState() {
+  authState = 'unknown'; // Allow retry
+}
+```
