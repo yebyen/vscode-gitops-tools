@@ -2,10 +2,10 @@
 
 ## Phase 1: Repository Setup
 
-- [ ] Fork `weaveworks/vscode-gitops-tools` to DAO-controlled fork
-- [ ] Update README documenting the DAO co-maintainer model
-- [ ] Add "Community Fork" notice explaining relationship to upstream
-- [ ] Document that DAO exercises judgment and works in public
+- [~] Fork `weaveworks/vscode-gitops-tools` to DAO-controlled fork
+- [~] Update README documenting the DAO co-maintainer model
+- [~] Add "Community Fork" notice explaining relationship to upstream
+- [~] Document that DAO exercises judgment and works in public
 - [ ] Configure branch protection on `main` and `edge`
 
 ## Phase 2: Core Infrastructure
