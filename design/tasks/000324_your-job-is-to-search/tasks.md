@@ -2,14 +2,14 @@
 
 ## Phase 1: Security Audit & Documentation
 
-- [~] Run `npm audit` on all three package locations and document baseline
+- [x] Run `npm audit` on all three package locations and document baseline
 - [x] Create backup branch before making changes
 
 ## Phase 2: Non-Breaking Dependency Updates
 
-- [ ] Update root package.json patch/minor versions via `npm update`
-- [ ] Update `semver` to ^7.7.4 (fixes ReDoS vulnerability)
-- [ ] Update `jose` to latest (security fix)
+- [x] Update root package.json patch/minor versions via `npm update`
+- [~] Update `semver` to ^7.7.4 (fixes ReDoS vulnerability)
+- [~] Update `jose` to latest (security fix)
 - [ ] Update `@types/node` to 20.x
 - [ ] Update webview dependencies: `solid-js` to ^1.9.12 (XSS fix)
 - [ ] Update webview dependencies: `@vscode/codicons` to ^0.0.45
