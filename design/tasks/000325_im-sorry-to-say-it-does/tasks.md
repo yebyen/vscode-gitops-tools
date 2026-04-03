@@ -10,16 +10,16 @@
 
 ## Phase 2: Data Provider Integration
 
-- [~] Modify `sourceDataProvider.ts` to call `ensureAuthenticated()` before `Promise.all`
-- [~] Modify `workloadDataProvider.ts` to call `ensureAuthenticated()` before `Promise.all`
-- [ ] Handle auth failure gracefully (show placeholder node or empty tree)
-- [ ] Add "Authentication Required" tree node type for failed auth state
+- [x] Modify `sourceDataProvider.ts` to call `ensureAuthenticated()` before `Promise.all`
+- [x] Modify `workloadDataProvider.ts` to call `ensureAuthenticated()` before `Promise.all`
+- [x] Handle auth failure gracefully (show placeholder node or empty tree)
+- [x] Add "Authentication Required" tree node type for failed auth state
 
 ## Phase 3: Context Switch Handling
 
-- [ ] Call `resetAuthState()` in `onDidChangeContext` handler (`treeViews.ts`)
-- [ ] Call `resetAuthState()` in `onDidChangeKubeconfigPath` handler
-- [ ] Ensure auth state resets when kubectl proxy restarts
+- [~] Call `resetAuthState()` in `onDidChangeContext` handler (`treeViews.ts`)
+- [~] Call `resetAuthState()` in `onDidChangeKubeconfigPath` handler
+- [~] Ensure auth state resets when kubectl proxy restarts
 
 ## Phase 4: Error Handling & UX
 
