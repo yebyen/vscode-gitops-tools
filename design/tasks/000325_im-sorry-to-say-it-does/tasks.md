@@ -2,16 +2,16 @@
 
 ## Phase 1: Auth Probe Module
 
-- [~] Create `src/k8s/authProbe.ts` with `ensureAuthenticated()` function
-- [~] Implement auth state caching (session-scoped)
-- [~] Add `resetAuthState()` function for context switches
-- [~] Detect Azure device code patterns in stderr (`DeviceCodeCredential`, `login.microsoft.com/device`)
-- [~] Add user-friendly notification when auth is required
+- [x] Create `src/k8s/authProbe.ts` with `ensureAuthenticated()` function
+- [x] Implement auth state caching (session-scoped)
+- [x] Add `resetAuthState()` function for context switches
+- [x] Detect Azure device code patterns in stderr (`DeviceCodeCredential`, `login.microsoft.com/device`)
+- [x] Add user-friendly notification when auth is required
 
 ## Phase 2: Data Provider Integration
 
-- [ ] Modify `sourceDataProvider.ts` to call `ensureAuthenticated()` before `Promise.all`
-- [ ] Modify `workloadDataProvider.ts` to call `ensureAuthenticated()` before `Promise.all`
+- [~] Modify `sourceDataProvider.ts` to call `ensureAuthenticated()` before `Promise.all`
+- [~] Modify `workloadDataProvider.ts` to call `ensureAuthenticated()` before `Promise.all`
 - [ ] Handle auth failure gracefully (show placeholder node or empty tree)
 - [ ] Add "Authentication Required" tree node type for failed auth state
 
