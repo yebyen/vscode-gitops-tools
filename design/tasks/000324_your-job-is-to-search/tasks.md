@@ -25,8 +25,8 @@
 - [x] Fix `change-case` API (paramCase -> kebabCase)
 - [x] Replace deprecated `request` module with native `https`
 - [x] Fix `glob` API for async usage
-- [ ] Update `vite` in webviews to ^5.x (not 8.x)
-- [ ] Update `vite-plugin-solid` to compatible version
+- [x] Update `vite` in webviews to ^5.4.19
+- [x] Update `vite-plugin-solid` to ^2.11.6
 - [ ] Run full test suite after each major update
 
 ## Phase 4: Dev Dependency Updates
@@ -40,29 +40,29 @@
 
 ## Phase 5: GitHub Actions Updates
 
-- [ ] Update `actions/checkout` from v3 to v4
-- [ ] Update `actions/setup-node` from v3 to v4
-- [ ] Standardize Node.js version to 20 in all workflows
-- [ ] Review and update `engineerd/setup-kind` version
-- [ ] Pin `fluxcd/flux2/action` to specific release tag instead of main
-- [ ] Update `HaaLeo/publish-vscode-extension` to latest
-- [ ] Update `ncipollo/release-action` to latest
+- [x] Update `actions/checkout` from v3 to v4
+- [x] Update `actions/setup-node` from v3 to v4
+- [x] Standardize Node.js version to 20 in all workflows
+- [x] Review and update `engineerd/setup-kind` version (kept at v0.5.0 - stable)
+- [x] Pin `fluxcd/flux2/action` to v2.4.0 instead of main
+- [x] Update `HaaLeo/publish-vscode-extension` to v2
+- [x] Update `ncipollo/release-action` to v1.16.0
 
 ## Phase 6: Add Security Scanning to CI
 
-- [ ] Add `npm audit --audit-level=high` step to ci.yml for root package
-- [ ] Add `npm audit` step for webview-ui/createFromTemplate
-- [ ] Add `npm audit` step for webview-ui/configureGitOps
-- [ ] Add `npm ci` before audit steps to ensure clean install
+- [x] Add `npm audit --audit-level=high` step to ci.yml for root package
+- [x] Add `npm audit` step for webview-ui/createFromTemplate
+- [x] Add `npm audit` step for webview-ui/configureGitOps
+- [x] Add `npm ci` before audit steps to ensure clean install
 - [ ] Test CI workflow on a PR
 
 ## Phase 7: Verification & Cleanup
 
-- [ ] Run `npm audit` and verify 0 high/critical vulnerabilities
-- [ ] Run full build: `npm run compile`
-- [ ] Run tests: `npm test`
+- [x] Run `npm audit` and verify 0 high/critical vulnerabilities (root: 0 high/critical, 3 low/moderate in mocha)
+- [x] Run full build: `npm run compile`
+- [~] Run tests: `npm test`
 - [ ] Run linting: `npm run lint`
 - [ ] Build webviews: `npm run build:webview`
 - [ ] Test extension manually in VS Code
-- [ ] Update package-lock.json files (commit them)
+- [x] Update package-lock.json files (commit them)
 - [ ] Update CHANGELOG.md with security updates
