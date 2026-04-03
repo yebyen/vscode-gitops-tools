@@ -17,16 +17,16 @@
 
 ## Phase 3: Context Switch Handling
 
-- [~] Call `resetAuthState()` in `onDidChangeContext` handler (`treeViews.ts`)
-- [~] Call `resetAuthState()` in `onDidChangeKubeconfigPath` handler
-- [~] Ensure auth state resets when kubectl proxy restarts
+- [x] Call `resetAuthState()` in `onDidChangeContext` handler (`treeViews.ts`)
+- [x] Call `resetAuthState()` in `onDidChangeKubeconfigPath` handler
+- [x] Ensure auth state resets when kubectl proxy restarts
 
 ## Phase 4: Error Handling & UX
 
-- [ ] Consolidate multiple auth error messages into single notification
-- [ ] Add "Open Login Page" action button to auth notification
-- [ ] Prevent console spam from parallel timeout errors
-- [ ] Log auth probe results to GitOps output channel
+- [x] Consolidate multiple auth error messages into single notification
+- [x] Add "Open Login Page" action button to auth notification
+- [x] Prevent console spam from parallel timeout errors
+- [x] Log auth probe results to GitOps output channel
 
 ## Phase 5: Testing
 
