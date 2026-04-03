@@ -13,6 +13,7 @@ import { WorkloadNode } from '../nodes/workloadNode';
 import { refreshWorkloadsTreeView } from '../treeViews';
 import { DataProvider } from './dataProvider';
 import { sortByMetadataName } from '../../kubernetes/kubernetesUtils';
+import { ensureAuthenticated } from '../../k8s/authProbe';
 
 /**
  * Defines data provider for loading Kustomizations
@@ -32,6 +33,16 @@ export class WorkloadDataProvider extends DataProvider {
 		const workloadNodes: WorkloadNode[] = [];
 
 		setVSCodeContext(ContextTypes.LoadingWorkloads, true);
+
+		// Ensure authentication before making parallel kubectl calls
+		// This prevents multiple device code prompts when tokens are expired
+		const isAuthed = await ensureAuthenticated();
+		if (!isAuthed) {
+			setVSCodeContext(ContextTypes.LoadingWorkloads, false);
+			setVSCodeContext(ContextTypes.NoWorkloads, true);
+			statusBar.stopLoadingTree();
+			return [];
+		}
 
 		const [kustomizations, helmReleases, namespaces] = await Promise.all([
 			// Fetch all workloads
