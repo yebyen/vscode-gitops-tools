@@ -8,32 +8,35 @@
 ## Phase 2: Non-Breaking Dependency Updates
 
 - [x] Update root package.json patch/minor versions via `npm update`
-- [~] Update `semver` to ^7.7.4 (fixes ReDoS vulnerability)
-- [~] Update `jose` to latest (security fix)
-- [ ] Update `@types/node` to 20.x
+- [x] Update `semver` to ^7.7.1 (fixes ReDoS vulnerability)
+- [x] Update `jose` to ^5.10.0 (security fix)
+- [x] Update `@types/node` to ^20.17.50
 - [ ] Update webview dependencies: `solid-js` to ^1.9.12 (XSS fix)
 - [ ] Update webview dependencies: `@vscode/codicons` to ^0.0.45
-- [ ] Run `npm install` and verify build compiles
+- [x] Run `npm install` and verify build compiles
 - [ ] Run tests to verify no regressions
 
 ## Phase 3: Breaking Dependency Updates
 
-- [ ] Update `@kubernetes/client-node` from ^0.16.2 to ^1.4.0
-- [ ] Review and fix any API changes in kubernetes client usage
-- [ ] Update `@vscode/extension-telemetry` to ^1.5.1
-- [ ] Update `uuid` to latest compatible version
+- [x] Update `@kubernetes/client-node` from ^0.16.2 to ^1.0.0
+- [x] Review and fix any API changes in kubernetes client usage
+- [x] Update `@vscode/extension-telemetry` to ^0.9.8
+- [x] Update `uuid` to ^11.1.0
+- [x] Fix `change-case` API (paramCase -> kebabCase)
+- [x] Replace deprecated `request` module with native `https`
+- [x] Fix `glob` API for async usage
 - [ ] Update `vite` in webviews to ^5.x (not 8.x)
 - [ ] Update `vite-plugin-solid` to compatible version
 - [ ] Run full test suite after each major update
 
 ## Phase 4: Dev Dependency Updates
 
-- [ ] Update `typescript` to ^5.x
-- [ ] Update `webpack` and `webpack-cli` to latest 5.x
-- [ ] Update `ts-loader` to latest
-- [ ] Update `mocha` to ^11.x (or latest compatible)
-- [ ] Update `@vscode/test-electron` to latest
-- [ ] Defer ESLint 9 update (requires flat config migration)
+- [x] Update `typescript` to ^5.8.3
+- [x] Update `webpack` to ^5.99.9 and `webpack-cli` to ^6.0.1
+- [x] Update `ts-loader` to ^9.5.2
+- [x] Update `mocha` to ^11.1.0
+- [x] Update `@vscode/test-electron` to ^2.5.2
+- [x] Defer ESLint 9 update (requires flat config migration) - kept at ^8.57.1
 
 ## Phase 5: GitHub Actions Updates
 
