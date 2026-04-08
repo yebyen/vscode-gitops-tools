@@ -14,9 +14,9 @@
 
 ## Phase 3: IntelliSense Provider
 
-- [~] Implement `src/language/helmReleaseValuesCompletionProvider.ts` - VSCode CompletionItemProvider for values field
-- [ ] Register completion provider in `src/extension.ts`
-- [ ] Add hover provider for property documentation from schema
+- [x] Implement `src/language/helmReleaseValuesCompletionProvider.ts` - VSCode CompletionItemProvider for values field
+- [x] Register completion provider in `src/extension.ts`
+- [~] Add hover provider for property documentation from schema
 
 ## Phase 4: Validation
 
