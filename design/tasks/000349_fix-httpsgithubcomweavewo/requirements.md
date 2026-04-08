@@ -1,5 +1,47 @@
 # Requirements: HelmRelease Values IntelliSense Support
 
+## Background
+
+### What is Helm?
+
+**Helm** is the most popular package manager for Kubernetes - similar to `apt` for Ubuntu or `npm` for Node.js, but for Kubernetes applications. A Helm "chart" is a package containing all the Kubernetes resource definitions needed to deploy an application (like Traefik, PostgreSQL, or Grafana).
+
+### What is Flux and HelmRelease?
+
+**Flux** is a GitOps tool that automates Kubernetes deployments. Instead of manually running `helm install`, you declare what you want in a YAML file stored in Git, and Flux continuously ensures your cluster matches that desired state.
+
+A **HelmRelease** is a Flux custom resource that tells Flux: "Install this Helm chart with these settings." Example:
+
+```yaml
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: traefik
+spec:
+  chart:
+    spec:
+      chart: traefik           # Which Helm chart to install
+      sourceRef:
+        kind: HelmRepository
+        name: traefik-repo
+  values:                       # <-- Configuration for the chart
+    dashboard:
+      enabled: true
+    ports:
+      web:
+        port: 8080
+```
+
+### The Problem
+
+The `values` field is where users configure the application. Each Helm chart has different configuration options - Traefik has `dashboard.enabled`, PostgreSQL has `auth.password`, etc. These can be deeply nested with hundreds of options.
+
+Currently, users type these values blind, often making typos or using wrong types, only discovering errors after deployment fails.
+
+### The Solution
+
+Some Helm charts include a `values.schema.json` file that describes all valid configuration options (types, defaults, descriptions). This feature would use that schema to provide auto-completion and validation as users edit HelmRelease files in VS Code.
+
 ## Overview
 
 Add IntelliSense (code completion and validation) for the `values` field in HelmRelease resource definitions, using JSON schemas bundled with Helm charts.
