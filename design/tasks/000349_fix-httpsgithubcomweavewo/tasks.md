@@ -4,11 +4,11 @@
 
 - [x] Create `src/language/` directory for language feature modules
 - [x] Implement `src/language/helmReleaseDetector.ts` - detect HelmRelease resources in YAML documents
-- [~] Implement `src/language/chartReferenceParser.ts` - extract chart name, version, and sourceRef from HelmRelease spec
+- [x] Implement `src/language/chartReferenceParser.ts` - extract chart name, version, and sourceRef from HelmRelease spec
 
 ## Phase 2: Schema Retrieval
 
-- [ ] Implement `src/language/schemaCache.ts` - in-memory and disk caching for JSON schemas
+- [~] Implement `src/language/schemaCache.ts` - in-memory and disk caching for JSON schemas
 - [ ] Implement `src/language/helmChartSchemaFetcher.ts` - fetch and extract `values.schema.json` from Helm chart archives
 - [ ] Add support for fetching charts from HelmRepository sources
 
