@@ -16,11 +16,11 @@
 
 - [x] Implement `src/language/helmReleaseValuesCompletionProvider.ts` - VSCode CompletionItemProvider for values field
 - [x] Register completion provider in `src/extension.ts`
-- [~] Add hover provider for property documentation from schema
+- [x] Add hover provider for property documentation from schema
 
 ## Phase 4: Validation
 
-- [ ] Implement diagnostic provider for values validation against schema
+- [~] Implement diagnostic provider for values validation against schema
 - [ ] Register diagnostic collection and update on document change
 
 ## Phase 5: Testing & Polish
