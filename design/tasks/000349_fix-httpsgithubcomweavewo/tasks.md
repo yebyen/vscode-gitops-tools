@@ -9,12 +9,12 @@
 ## Phase 2: Schema Retrieval
 
 - [x] Implement `src/language/schemaCache.ts` - in-memory and disk caching for JSON schemas
-- [~] Implement `src/language/helmChartSchemaFetcher.ts` - fetch and extract `values.schema.json` from Helm chart archives
-- [ ] Add support for fetching charts from HelmRepository sources
+- [x] Implement `src/language/helmChartSchemaFetcher.ts` - fetch and extract `values.schema.json` from Helm chart archives
+- [x] Add support for fetching charts from HelmRepository sources
 
 ## Phase 3: IntelliSense Provider
 
-- [ ] Implement `src/language/helmReleaseValuesCompletionProvider.ts` - VSCode CompletionItemProvider for values field
+- [~] Implement `src/language/helmReleaseValuesCompletionProvider.ts` - VSCode CompletionItemProvider for values field
 - [ ] Register completion provider in `src/extension.ts`
 - [ ] Add hover provider for property documentation from schema
 
