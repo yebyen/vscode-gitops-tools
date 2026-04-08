@@ -1,4 +1,4 @@
-import { commands, ExtensionContext, ExtensionMode, window, workspace } from 'vscode';
+import { commands, ExtensionContext, ExtensionMode, languages, window, workspace } from 'vscode';
 import { CommandId, registerCommands } from './commands';
 import { getExtensionVersion } from './commands/showInstalledVersions';
 import { showNewUserGuide } from './commands/showNewUserGuide';
@@ -12,6 +12,10 @@ import { Telemetry, TelemetryEventNames } from './telemetry';
 import { createTreeViews, clusterTreeViewProvider, sourceTreeViewProvider, workloadTreeViewProvider } from './views/treeViews';
 import { shell } from './shell';
 import { kubeProxyKeepAlive, setExtensionActive, disposeKubeProxy } from './k8s/kubectlProxy';
+import { helmReleaseValuesCompletionProvider } from './language/helmReleaseValuesCompletionProvider';
+import { helmReleaseValuesHoverProvider } from './language/helmReleaseValuesHoverProvider';
+import { helmReleaseValuesDiagnosticProvider } from './language/helmReleaseValuesDiagnosticProvider';
+import { schemaCache } from './language/schemaCache';
 
 /** Disable interactive modal dialogs, useful for testing */
 export let disableConfirmations = false;
@@ -40,11 +44,52 @@ export async function activate(context: ExtensionContext) {
 
 	telemetry = new Telemetry(context, getExtensionVersion(), GitOpsExtensionConstants.ExtensionId);
 
+	// Initialize schema cache with extension context for disk storage
+	schemaCache.initialize(context);
+
 	// create gitops tree views
 	createTreeViews();
 
 	// register gitops commands
 	registerCommands(context);
+
+	// Register HelmRelease values completion provider
+	context.subscriptions.push(
+		languages.registerCompletionItemProvider(
+			{ language: 'yaml', scheme: 'file' },
+			helmReleaseValuesCompletionProvider,
+			'.', ':', ' '  // Trigger on property access, colon, and space
+		)
+	);
+
+	// Register HelmRelease values hover provider
+	context.subscriptions.push(
+		languages.registerHoverProvider(
+			{ language: 'yaml', scheme: 'file' },
+			helmReleaseValuesHoverProvider
+		)
+	);
+
+	// Register HelmRelease values diagnostic provider
+	context.subscriptions.push(helmReleaseValuesDiagnosticProvider.getDiagnosticCollection());
+
+	// Validate on document open and change
+	context.subscriptions.push(
+		workspace.onDidOpenTextDocument(doc => {
+			helmReleaseValuesDiagnosticProvider.validateDocument(doc);
+		}),
+		workspace.onDidChangeTextDocument(event => {
+			helmReleaseValuesDiagnosticProvider.validateDocument(event.document);
+		}),
+		workspace.onDidCloseTextDocument(doc => {
+			helmReleaseValuesDiagnosticProvider.clearDiagnostics(doc);
+		})
+	);
+
+	// Validate already open documents
+	workspace.textDocuments.forEach(doc => {
+		helmReleaseValuesDiagnosticProvider.validateDocument(doc);
+	});
 
 	telemetry.send(TelemetryEventNames.Startup);
 

@@ -41,6 +41,7 @@ This extension uses two different methods to get information from the Kubernetes
 # Features
 - Configure, visualize and manage Flux resources
 - Tree views for Clusters, Sources, and Workloads
+- **HelmRelease IntelliSense** - Auto-completion, hover documentation, and validation for HelmRelease `values` fields
 - Observe Flux resource updates in the cluster in real-time
 - Select clusters and examine installed [GitOps Toolkit components](https://fluxcd.io/docs/components/)
 - Enable and Disable GitOps (install/uninstall Flux) on clusters
@@ -55,6 +56,18 @@ This extension uses two different methods to get information from the Kubernetes
 - Trace Kubernetes objects created by workloads
 - Watch Flux controller logs and `flux` CLI commands for diagnostics
 - Documentation links for [Flux](https://fluxcd.io/docs) and [Weave GitOps](https://docs.gitops.weave.works/docs/intro/) embedded in the extension
+
+## HelmRelease Values IntelliSense
+
+When editing HelmRelease resources, the extension provides IntelliSense support for the `values` field:
+
+- **Auto-completion**: Get suggestions for valid configuration properties based on the Helm chart's `values.schema.json`
+- **Hover documentation**: See property descriptions, types, and default values when hovering over keys
+- **Validation**: Get warnings for unknown properties and type mismatches
+
+This feature works with Helm charts that include a JSON schema (like Traefik, Bitnami charts, etc.). The schema is automatically fetched from the HelmRepository and cached for offline use.
+
+![HelmRelease IntelliSense](docs/images/helmrelease-intellisense.png)
 
 # Video / Demo
 
