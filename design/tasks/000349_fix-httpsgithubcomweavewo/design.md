@@ -121,3 +121,40 @@ vscode.languages.registerCompletionItemProvider(
 | Chart schema not available | Graceful degradation - no completions |
 | Large schemas slow editor | Lazy load, cache aggressively |
 | Schema format variations | Validate schema before use |
+
+## Implementation Notes
+
+### Files Created
+
+- `src/language/helmReleaseDetector.ts` - Detects HelmRelease resources in YAML documents, parses metadata/chart info, identifies `values` field ranges
+- `src/language/chartReferenceParser.ts` - Extracts chart name, version, and source reference from HelmReleaseInfo
+- `src/language/schemaCache.ts` - In-memory and disk caching for JSON schemas with 24-hour TTL
+- `src/language/helmChartSchemaFetcher.ts` - Fetches charts from HelmRepository, extracts `values.schema.json`
+- `src/language/helmReleaseValuesCompletionProvider.ts` - VSCode CompletionItemProvider with snippet support
+- `src/language/helmReleaseValuesHoverProvider.ts` - Shows property documentation on hover
+- `src/language/helmReleaseValuesDiagnosticProvider.ts` - Validates values against schema, reports warnings
+- `src/test/suite/helmReleaseDetector.test.ts` - Unit tests for detection logic
+
+### Dependencies Added
+
+- `tar: ^6.1.11` - For extracting Helm chart archives
+- `@types/tar: ^6.1.4` - TypeScript definitions
+
+### Integration Points
+
+- Registered in `extension.ts` with `languages.registerCompletionItemProvider` and `languages.registerHoverProvider`
+- Diagnostic provider uses `workspace.onDidOpenTextDocument` and `workspace.onDidChangeTextDocument`
+- Schema cache initialized with extension context for globalStorage access
+
+### Key Decisions
+
+1. **Custom YAML parsing** - Used regex-based parsing instead of adding yaml dependency (simpler, lighter)
+2. **HelmRepository only** - Initially supports only HelmRepository sources (GitRepository/OCI more complex)
+3. **Graceful degradation** - If chart has no schema or fetch fails, features silently disable
+4. **Debounced validation** - 500ms delay to avoid excessive validation during typing
+
+### Gotchas
+
+- The Helm repository index.yaml format is parsed manually to avoid YAML dependency
+- Schema fetching is async and cached to avoid blocking the editor
+- Multi-document YAML files (with `---` separators) are handled correctly
