@@ -20,12 +20,12 @@
 
 ## Phase 4: Validation
 
-- [~] Implement diagnostic provider for values validation against schema
-- [ ] Register diagnostic collection and update on document change
+- [x] Implement diagnostic provider for values validation against schema
+- [x] Register diagnostic collection and update on document change
 
 ## Phase 5: Testing & Polish
 
-- [ ] Add unit tests for HelmRelease detection
+- [~] Add unit tests for HelmRelease detection
 - [ ] Add unit tests for schema parsing
 - [ ] Test with real Helm charts that have schemas (e.g., traefik, bitnami charts)
 - [ ] Handle edge cases: missing schema, invalid schema, offline mode
