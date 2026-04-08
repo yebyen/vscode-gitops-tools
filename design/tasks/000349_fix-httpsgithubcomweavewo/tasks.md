@@ -3,8 +3,8 @@
 ## Phase 1: Foundation
 
 - [x] Create `src/language/` directory for language feature modules
-- [~] Implement `src/language/helmReleaseDetector.ts` - detect HelmRelease resources in YAML documents
-- [ ] Implement `src/language/chartReferenceParser.ts` - extract chart name, version, and sourceRef from HelmRelease spec
+- [x] Implement `src/language/helmReleaseDetector.ts` - detect HelmRelease resources in YAML documents
+- [~] Implement `src/language/chartReferenceParser.ts` - extract chart name, version, and sourceRef from HelmRelease spec
 
 ## Phase 2: Schema Retrieval
 
