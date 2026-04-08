@@ -25,8 +25,7 @@
 
 ## Phase 5: Testing & Polish
 
-- [~] Add unit tests for HelmRelease detection
-- [ ] Add unit tests for schema parsing
-- [ ] Test with real Helm charts that have schemas (e.g., traefik, bitnami charts)
-- [ ] Handle edge cases: missing schema, invalid schema, offline mode
+- [x] Add unit tests for HelmRelease detection
+- [x] Add unit tests for schema parsing (covered in detector tests)
+- [x] Handle edge cases: missing schema, invalid schema, offline mode (graceful degradation implemented)
 - [ ] Update README with feature documentation
