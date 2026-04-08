@@ -28,4 +28,4 @@
 - [x] Add unit tests for HelmRelease detection
 - [x] Add unit tests for schema parsing (covered in detector tests)
 - [x] Handle edge cases: missing schema, invalid schema, offline mode (graceful degradation implemented)
-- [ ] Update README with feature documentation
+- [x] Update README with feature documentation
