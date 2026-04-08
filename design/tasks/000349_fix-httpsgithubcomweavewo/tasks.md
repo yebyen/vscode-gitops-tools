@@ -8,8 +8,8 @@
 
 ## Phase 2: Schema Retrieval
 
-- [~] Implement `src/language/schemaCache.ts` - in-memory and disk caching for JSON schemas
-- [ ] Implement `src/language/helmChartSchemaFetcher.ts` - fetch and extract `values.schema.json` from Helm chart archives
+- [x] Implement `src/language/schemaCache.ts` - in-memory and disk caching for JSON schemas
+- [~] Implement `src/language/helmChartSchemaFetcher.ts` - fetch and extract `values.schema.json` from Helm chart archives
 - [ ] Add support for fetching charts from HelmRepository sources
 
 ## Phase 3: IntelliSense Provider
