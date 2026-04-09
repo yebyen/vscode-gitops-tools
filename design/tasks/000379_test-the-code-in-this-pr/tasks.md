@@ -4,8 +4,8 @@
 
 - [x] Checkout the PR branch: `git checkout feature/000349-fix-httpsgithubcomweavewo`
 - [x] Run TypeScript compilation: `npm run compile` ✅ compiled with 3 warnings (pre-existing, not from PR)
-- [~] Run ESLint: `npm run lint`
-- [ ] Review `helmChartSchemaFetcher.ts` for safe network operations (no credential leaks)
+- [x] Run ESLint: `npm run lint` ✅ 0 errors, 86 warnings (style only - trailing commas, quotes)
+- [~] Review `helmChartSchemaFetcher.ts` for safe network operations (no credential leaks)
 - [ ] Review `schemaCache.ts` for safe filesystem operations (proper cleanup)
 
 ## Unit Tests
