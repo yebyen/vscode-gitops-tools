@@ -2,7 +2,7 @@
 
 ## Static Analysis
 
-- [ ] Checkout the PR branch: `git checkout feature/000349-fix-httpsgithubcomweavewo`
+- [~] Checkout the PR branch: `git checkout feature/000349-fix-httpsgithubcomweavewo`
 - [ ] Run TypeScript compilation: `npm run compile`
 - [ ] Run ESLint: `npm run lint`
 - [ ] Review `helmChartSchemaFetcher.ts` for safe network operations (no credential leaks)
