@@ -19,9 +19,10 @@
 
 ## Dependency Audit
 
-- [ ] Run `npm audit` to check for vulnerabilities
-- [ ] Verify `tar` package is from official source (npm registry)
-- [ ] Confirm `tar` is actually used in `helmChartSchemaFetcher.ts`
+- [x] Run `npm audit` to check for vulnerabilities ✅ 30 vulnerabilities found (pre-existing, same count on main branch)
+  - `tar` vulnerabilities exist on main via `@kubernetes/client-node` - not introduced by this PR
+- [x] Verify `tar` package is from official source (npm registry) ✅ Uses `tar@^6.1.11` from npm
+- [x] Confirm `tar` is actually used in `helmChartSchemaFetcher.ts` ✅ Used for extracting Helm chart archives
 
 ## Build Verification
 
